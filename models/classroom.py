@@ -15,5 +15,3 @@ class Classroom(Base):
 
   # Relation
   sessions: Mapped[List["Session"]] = relationship(back_populates="classroom")
-
-

@@ -11,30 +11,29 @@ from typing import List, Optional
 from .base import Base
 
 class Session(Base):
-  __tablename__ = "session"
+    __tablename__ = "session"
 
-  id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-  status: Mapped[str] = mapped_column(
-      Enum("OPEN", "CLOSED", "ARCHIVED", name="session_status_enum"),
-      nullable=False,
-  )
-  title: Mapped[Optional[str]] = mapped_column(String(100))
-  description: Mapped[Optional[str]] = mapped_column(Text)
-  start_date: Mapped[date] = mapped_column(Date, nullable=False)
-  end_date: Mapped[date] = mapped_column(Date, nullable=False)
-  max_capacity: Mapped[int] = mapped_column(nullable=False)
-  prerequisite: Mapped[Optional[str]] = mapped_column(Text)
-  id_1: Mapped[str] = mapped_column(
-      ForeignKey("classroom.id"), nullable=False
-  )  # FK vers classroom
-  id_2: Mapped[int] = mapped_column(
-      ForeignKey("teachers.id"), nullable=False
-  )  # FK vers teachers
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    status: Mapped[str] = mapped_column(
+        Enum("OPEN", "CLOSED", "ARCHIVED", name="session_status_enum"),
+        nullable=False,
+    )
+    title: Mapped[Optional[str]] = mapped_column(String(100))
+    description: Mapped[Optional[str]] = mapped_column(Text)
+    start_date: Mapped[date] = mapped_column(Date, nullable=False)
+    end_date: Mapped[date] = mapped_column(Date, nullable=False)
+    max_capacity: Mapped[int] = mapped_column(nullable=False)
+    prerequisite: Mapped[Optional[str]] = mapped_column(Text)
+    id_1: Mapped[str] = mapped_column(
+        ForeignKey("classroom.id"), nullable=False
+    )  # FK vers classroom
+    id_2: Mapped[int] = mapped_column(
+        ForeignKey("teachers.id"), nullable=False
+    )  # FK vers teachers
 
-  # Relations
-  classroom: Mapped["Classroom"] = relationship(back_populates="sessions")
-  teacher: Mapped["Teacher"] = relationship(back_populates="sessions")
-  registrations: Mapped[List["Registration"]] = relationship(
-      back_populates="session"
-  )
-
+    # Relations
+    classroom: Mapped["Classroom"] = relationship(back_populates="sessions")
+    teacher: Mapped["Teacher"] = relationship(back_populates="sessions")
+    registrations: Mapped[List["Registration"]] = relationship(
+        back_populates="session"
+    )

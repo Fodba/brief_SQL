@@ -4,12 +4,12 @@ from .base import Base
 
 
 class AccessLevel(Base):
-  __tablename__ = "access_level"
+    __tablename__ = "access_level"
 
-  id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-  label: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    label: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
-  # Relation
-  admins: Mapped[List["Admin"]] = relationship(
-      back_populates="access_level_rel"
-  )
+    # Relation
+    admins: Mapped[List["Admin"]] = relationship(
+        back_populates="access_level_rel"
+    )

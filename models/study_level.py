@@ -11,4 +11,3 @@ class StudyLevel(Base):
 
   # Relation
   students: Mapped[List["Student"]] = relationship(back_populates="study_level")
-

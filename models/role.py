@@ -12,3 +12,4 @@ class Role(Base):
 
   # Relation
   users: Mapped[List["User"]] = relationship(back_populates="role")
+  
