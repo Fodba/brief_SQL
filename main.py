@@ -1,10 +1,9 @@
 import os
 import psycopg2
-from psycopg2 import sql  
-import pydantic
+from psycopg2 import sql
 from dotenv import load_dotenv
 from models import Base
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine, inspect
 
 
 # Charge le contenu du fichier .env dans les variables d'environnement
