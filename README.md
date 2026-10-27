@@ -29,7 +29,7 @@ Modifier peer par scram-sha-256
 
 
 ## Structure
-
+```
 mon_projet/
 │
 ├── .env
@@ -49,3 +49,4 @@ mon_projet/
     ├── study_level.py      # Classe StudyLevel
     ├── teacher.py          # Classe Teacher
     ├── user.py             # Classe User
+```
