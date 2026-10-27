@@ -33,12 +33,19 @@ Modifier peer par scram-sha-256
 mon_projet/
 │
 ├── .env
-├── main.py              # Script principal (création de la base, etc.)
+├── main.py                 # Script principal (création de la base, etc.)
 └── models/
-    ├── __init__.py      # Importe Base et tous les modèles
-    ├── base.py          # Contient la déclaration de Base
-    ├── role.py          # Classe Role
-    ├── study_level.py   # Classe StudyLevel
-    ├── user.py          # Classe User
-    ├── student.py       # Classe Student
-    └── ...              # (Et ainsi de suite pour les autres tables)
+    ├── __init__.py         # Importe Base et tous les modèles
+    ├── base.py             # Contient la déclaration de Base
+    ├── access_level.py     # Classe AccessLevel
+    ├── admin.py            # Classe Admin
+    ├── classroom.py        # Classe Classroom
+    ├── job.py              # Classe Job
+    ├── registration.py     # Classe Registration
+    ├── role.py             # Classe Role
+    ├── session.py          # Classe Session
+    ├── staff.py            # Classe Staff
+    ├── student.py          # Classe Student
+    ├── study_level.py      # Classe StudyLevel
+    ├── teacher.py          # Classe Teacher
+    ├── user.py             # Classe User
