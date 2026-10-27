@@ -26,3 +26,26 @@ sudo vim pg_hba.conf
 ```
 
 Modifier peer par scram-sha-256
+
+
+## Structure
+
+mon_projet/
+│
+├── .env
+├── main.py                 # Script principal (création de la base, etc.)
+└── models/
+    ├── __init__.py         # Importe Base et tous les modèles
+    ├── base.py             # Contient la déclaration de Base
+    ├── access_level.py     # Classe AccessLevel
+    ├── admin.py            # Classe Admin
+    ├── classroom.py        # Classe Classroom
+    ├── job.py              # Classe Job
+    ├── registration.py     # Classe Registration
+    ├── role.py             # Classe Role
+    ├── session.py          # Classe Session
+    ├── staff.py            # Classe Staff
+    ├── student.py          # Classe Student
+    ├── study_level.py      # Classe StudyLevel
+    ├── teacher.py          # Classe Teacher
+    ├── user.py             # Classe User
