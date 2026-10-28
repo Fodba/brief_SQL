@@ -1,140 +1,94 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>CFTech</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container header-wrap">
-            <div class="logo">
-                <a href="/"><img src="{{ url_for('static', filename='img/logo.svg') }}"></a>
-            </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="/users">Utisitateurs</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <div class="container site-content">
-        <div class="main-layout">
+{% block content %}
+    <h1>Gestion des utilisateurs</h1>
 
-            <main class="main-content">
-                <h1>Gestion des utilisateurs</h1>
-                
-                <!-- Barre de navigation des onglets -->
-                <div class="tabs-nav-user">
-                    <div class="tab-btn active" onclick="switchTab('student-form', this)">Étudiant</div>
-                    <div class="tab-btn" onclick="switchTab('teacher-form', this)">Professeur</div>
-                    <div class="tab-btn" onclick="switchTab('staff-form', this)">Staff</div>
-                    <div class="tab-btn" onclick="switchTab('admin-form', this)">Admin</div>
-                </div>
-
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert-flash alert-{{ category }}">
-                                {{ message }}
-                                <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
-                            </div>
-
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                <!-- FORMULAIRE ÉTUDIANT -->
-                <div id="student-form" class="form-content active">
-                    <h2>Créer un compte Étudiant</h2>
-                    <form action="/users" method="POST">
-                        <p>
-                            <label>Prénom :</label>
-                            <input type="text" name="firstname" required>
-                        </p>
-                        <p>
-                            <label>Nom :</label>
-                            <input type="text" name="lastname" required>
-                        </p>
-                        <p>
-                            <label>Email :</label>
-                            <input type="email" name="email" required>
-                        </p>
-                        <p>
-                            <label>Date de naissance :</label>
-                            <input type="date" name="birth_date" required>
-                        </p>
-                        <p>
-                            <label>Téléphone :</label>
-                            <input type="tel" name="phone">
-                        </p>
-                        <p>
-                            <label>Dernière certification obtenue :</label>
-                            <input type="text" name="obtained_certification">
-                        </p>
-                        <p>
-                            <label> Niveau d'étude :</label>
-                            <select name="study_level_id" id="study_level_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
-                                <option value="" disabled selected>-- Sélectionnez votre niveau --</option>
-                                
-                                {# Boucle Jinja pour générer les options à partir de la base de données #}
-                                {% for level in study_level %}
-                                    <option value="{{ level.id }}">{{ level.label }}</option>
-                                {% endfor %}
-                                
-                            </select>
-                        </p>
-                        <button type="submit" style="background-color: #3498db; color: white; padding: 10px 15px; border: none; cursor: pointer;">S'inscrire comme Étudiant</button>
-                    </form>
-                </div>
-
-                <!-- FORMULAIRE PROFESSEUR -->
-                <div id="teacher-form" class="form-content">
-                    <h2>Créer un compte Enseignant</h2>
-                    <form action="/users/teacher" method="POST">
-                        <p><label>Prénom :</label><br><input type="text" name="firstname" required></p>
-                        <p><label>Nom :</label><br><input type="text" name="lastname" required></p>
-                        <p><label>Email :</label><br><input type="email" name="email" required></p>
-                        <p><label>Spécialité :</label><br><input type="text" name="specialty" required></p>
-                        <p><label>Taux horaire (€) :</label><br><input type="number" step="0.01" name="hourly_rate" required></p>
-                        <p><label>Biographie :</label><br><textarea name="biography" rows="4" style="width: 100%;"></textarea></p>
-                        <button type="submit" style="background-color: #2ecc71; color: white; padding: 10px 15px; border: none; cursor: pointer;">S'inscrire comme Professeur</button>
-                    </form>
-                </div>
-
-                 <!-- FORMULAIRE STAFF -->
-                <div id="staff-form" class="form-content">
-                </div>
-
-                 <!-- FORMULAIRE ADMIN -->
-                <div id="admin-form" class="form-content">
-                </div>
-            </main>
-            
-            <aside class="sidebar">
-                <h3>Derniers inscrits</h3>
-                <ul class="list-users">
-                {# Boucle Jinja pour afficher chaque produit #}
-                {% for user in all_users %}
-                    <li>
-                        <strong>{{ user.lastname }}</strong> {{ user.firstname }} <br>
-                        {{ user.email }} 
-                    </li>
-                {% endfor %}
-                </ul>
-            </aside>
-            
-        </div>
+    <!-- Barre de navigation des onglets -->
+    <div class="tabs-nav-user">
+        <div class="tab-btn active" onclick="switchTab('student-form', this)">Étudiant</div>
+        <div class="tab-btn" onclick="switchTab('teacher-form', this)">Professeur</div>
+        <div class="tab-btn" onclick="switchTab('staff-form', this)">Staff</div>
+        <div class="tab-btn" onclick="switchTab('admin-form', this)">Admin</div>
     </div>
 
-    <footer class="site-footer">
-        <div class="container footer-wrap">
-            <p>&copy; 2026 CFTech. Tous droits réservés.</p>
-        </div>
-    </footer>
-    <script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-flash alert-{{ category }}">
+                    {{ message }}
+                    <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!-- FORMULAIRE ÉTUDIANT -->
+    <div id="student-form" class="form-content active">
+        <h2>Créer un compte Étudiant</h2>
+        <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Date de naissance :</label>
+                <input type="date" name="birth_date" required>
+            </p>
+            <p>
+                <label>Téléphone :</label>
+                <input type="tel" name="phone">
+            </p>
+            <p>
+                <label>Dernière certification obtenue :</label>
+                <input type="text" name="obtained_certification">
+            </p>
+            <p>
+                <label> Niveau d'étude :</label>
+                <select name="study_level_id" id="study_level_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <option value="" disabled selected>-- Sélectionnez votre niveau --</option>
+                    
+                    {# Boucle Jinja pour générer les options à partir de la base de données #}
+                    {% for level in study_level %}
+                        <option value="{{ level.id }}">{{ level.label }}</option>
+                    {% endfor %}
+                    
+                </select>
+            </p>
+            <button type="submit" class="btn" value="student" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+    <!-- FORMULAIRE PROFESSEUR -->
+    <div id="teacher-form" class="form-content">
+        <h2>Créer un compte Enseignant</h2>
+        <form action="/users" method="POST">
+            <p><label>Prénom :</label><br><input type="text" name="firstname" required></p>
+            <p><label>Nom :</label><br><input type="text" name="lastname" required></p>
+            <p><label>Email :</label><br><input type="email" name="email" required></p>
+            <p><label>Spécialité :</label><br><input type="text" name="specialty" required></p>
+            <p><label>Taux horaire (€) :</label><br><input type="number" step="0.01" name="hourly_rate" required></p>
+            <p><label>Biographie :</label><br><textarea name="biography" rows="4" style="width: 100%;"></textarea></p>
+            <button type="submit" class="btn" value="teacher" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+        <!-- FORMULAIRE STAFF -->
+    <div id="staff-form" class="form-content">
+    </div>
+
+        <!-- FORMULAIRE ADMIN -->
+    <div id="admin-form" class="form-content">
+    </div>
+
+     <script>
         function switchTab(formId, button) {
             // Masquer tous les formulaires
             const forms = document.querySelectorAll('.form-content');
@@ -149,5 +103,17 @@
             button.classList.add('active');
         }
     </script>
-</body>
-</html>
+{% endblock %}
+{% block aside %}            
+    <h3>Derniers inscrits</h3>
+    <ul class="list-users">
+        {# Boucle Jinja pour afficher chaque produit #}
+        {% for user in all_users %}
+            <li>
+                <strong>{{ user.lastname }}</strong> {{ user.firstname }} <br>
+                {{ user.email }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   

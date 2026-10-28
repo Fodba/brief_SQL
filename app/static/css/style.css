@@ -118,6 +118,8 @@ a {
     }
 }
 
+h2{font-size:1.25rem}
+
 
 
 .logo img{
@@ -172,9 +174,53 @@ a {
     display: block;
 }
 
+.form-content form{
+    display: flex;
+    flex-flow: column;
+}
+
+.form-content p{
+    margin: .5rem 0;
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+}
+
+.form-content p label{
+    width: 35%;
+    text-align: right;
+    padding-right: 1rem;
+}
+
+
+.form-content input, .form-content select, .form-content textarea{
+    border: 1px solid #ada9a9;
+    padding: .25rem;
+    border-radius: .5rem;
+    background: #FFF;
+    width: 40% !important;
+    align-self: flex-start;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.btn{
+    background-color: #3498db; 
+    color: white; 
+    padding: 1rem; 
+    border: none; 
+    cursor: pointer;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    align-self: flex-end;
+}
+
 .alert-flash{
-    padding: .5rem;
-    border:1px solid #f0f0f0
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: .25rem;
+    margin-bottom: 1rem;
 }
 
 .alert-success{color:#118b35}

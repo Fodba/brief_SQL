@@ -32,7 +32,7 @@ def index():
    return render_template("index.html")
 
 @app.route("/users", methods=["GET"])
-def list_users():
+def manage_users():
     all_users = db.session.query(User).order_by(User.id.desc()).limit(5).all()
     study_levels = db.session.query(StudyLevel).all()
     # On envoie la liste des produits au fichier HTML
@@ -40,93 +40,90 @@ def list_users():
 
 
 @app.route("/users", methods=["POST"])
-def register_student():
-    try:
-        # Étape A : Insertion dans la table commune 'users'
-        new_user = User(
-            firstname=request.form.get("firstname"),
-            lastname=request.form.get("lastname"),
-            email=request.form.get("email"),
-            creation_date=date.today(),  # Date du jour générée automatiquement
-            is_active=True,
-        )
-        db.session.add(new_user)
+def register_user():
+    account_type = request.form.get("account_type")
 
-        # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
-        db.session.flush()
+    if account_type == "student":
+        try:
+            # Étape A : Insertion dans la table commune 'users'
+            new_user = User(
+                firstname=request.form.get("firstname"),
+                lastname=request.form.get("lastname"),
+                email=request.form.get("email"),
+                creation_date=date.today(),  # Date du jour générée automatiquement
+                is_active=True,
+            )
+            db.session.add(new_user)
 
-        # Étape B : Liaison et insertion dans la table spécifique 'students'
-        new_student = Student(
-            id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
-            birth_date=date.fromisoformat(request.form.get("birth_date")),
-            phone=request.form.get("phone"),
-            obtained_certification=request.form.get("obtained_certification"),
-            registration_date=date.today(),
-            id=int(
-                request.form.get("study_level_id")
-            ),  # ID Clé étrangère vers study_level
-        )
-        db.session.add(new_student)
+            # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
+            db.session.flush()
 
-        # Validation finale des deux opérations en base de données
-        db.session.commit()
-        flash(
-            "Inscription réussie ! Votre compte Étudiant a été enregistré en base de données.",
-            "success",
-        )
-        # 3. On redirige sur la page du formulaire au lieu d'une page blanche
-        return redirect(url_for("list_users"))
+            # Étape B : Liaison et insertion dans la table spécifique 'students'
+            new_student = Student(
+                id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
+                birth_date=date.fromisoformat(request.form.get("birth_date")),
+                phone=request.form.get("phone"),
+                obtained_certification=request.form.get("obtained_certification"),
+                registration_date=date.today(),
+                id=int(
+                    request.form.get("study_level_id")
+                ),  # ID Clé étrangère vers study_level
+            )
+            db.session.add(new_student)
 
-    except Exception as e:
-        db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
-        flash(f"Erreur lors de l'inscription de l'étudiant : {str(e)}", "danger")
-        return redirect(url_for("list_users"))
+            # Validation finale des deux opérations en base de données
+            db.session.commit()
+            flash(
+                "Inscription réussie ! Votre compte Étudiant a été enregistré en base de données.",
+                "success",
+            )
+            # 3. On redirige sur la page du formulaire au lieu d'une page blanche
+            return redirect(url_for("manage_users"))
 
-
-# ==========================================
-# 3. TRAITEMENT DE L'INSCRIPTION PROFESSEUR (POST)
-# ==========================================
-@app.route("/users/teacher", methods=["POST"])
-def register_teacher():
-    try:
-        # Étape A : Insertion dans la table commune 'users'
-        new_user = User(
-            firstname=request.form.get("firstname"),
-            lastname=request.form.get("lastname"),
-            email=request.form.get("email"),
-            creation_date=date.today(),
-            is_active=True,
-        )
-        db.session.add(new_user)
-
-        # On force la génération de l'ID utilisateur
-        db.session.flush()
-
-        # Étape B : Liaison et insertion dans la table spécifique 'teachers'
-        new_teacher = Teacher(
-            id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-            specialty=request.form.get("specialty"),
-            hire_date=date.today(),
-            hourly_rate=float(request.form.get("hourly_rate")),
-            biography=request.form.get("biography"),
-        )
-        db.session.add(new_teacher)
-
-        # Validation finale en base de données
-        db.session.commit()
-        flash(
-            "Inscription réussie ! Votre compte Professeur a été enregistré en base de données.",
-            "success",
-        )
-        # 3. On redirige sur la page du formulaire au lieu d'une page blanche
-        return redirect(url_for("list_users"))
-
-    except Exception as e:
-        db.session.rollback()  # Sécurité : annule la transaction si une erreur survient
-        flash(f"Erreur lors de l'inscription du professeur : {str(e)}", "danger")
-        return redirect(url_for("list_users"))
-
-
+        except Exception as e:
+            db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
+            flash(f"Erreur lors de l'inscription de l'étudiant : {str(e)}", "danger")
+            return redirect(url_for("manage_users"))
+    elif account_type == "teacher":
+        try:
+            # Étape A : Insertion dans la table commune 'users'
+            new_user = User(
+                firstname=request.form.get("firstname"),
+                lastname=request.form.get("lastname"),
+                email=request.form.get("email"),
+                creation_date=date.today(),
+                is_active=True,
+            )
+            db.session.add(new_user)
+    
+            # On force la génération de l'ID utilisateur
+            db.session.flush()
+    
+            # Étape B : Liaison et insertion dans la table spécifique 'teachers'
+            new_teacher = Teacher(
+                id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                specialty=request.form.get("specialty"),
+                hire_date=date.today(),
+                hourly_rate=float(request.form.get("hourly_rate")),
+                biography=request.form.get("biography"),
+            )
+            db.session.add(new_teacher)
+    
+            # Validation finale en base de données
+            db.session.commit()
+            flash(
+                "Inscription réussie ! Votre compte Professeur a été enregistré en base de données.",
+                "success",
+            )
+            # 3. On redirige sur la page du formulaire au lieu d'une autre page
+            return redirect(url_for("manage_users"))
+    
+        except Exception as e:
+            db.session.rollback()  # Sécurité : annule la transaction si une erreur survient
+            flash(f"Erreur lors de l'inscription du professeur : {str(e)}", "danger")
+            return redirect(url_for("manage_users"))
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
