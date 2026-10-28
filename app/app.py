@@ -36,8 +36,13 @@ def manage_users():
     all_users = db.session.query(User).order_by(User.id.desc()).limit(5).all()
     study_levels = db.session.query(StudyLevel).all()
     job_list = db.session.query(Job).all()
+    access_list = db.session.query(AccessLevel).all()
     # On envoie la liste des produits au fichier HTML
-    return render_template("users.html", all_users= all_users, study_level= study_levels, job_list= job_list)
+    return render_template("users.html", 
+                           all_users = all_users, 
+                           study_level = study_levels, 
+                           job_list = job_list,
+                           access_list = access_list)
 
 
 @app.route("/users", methods=["POST"])
@@ -47,11 +52,11 @@ def register_user():
     try:
         # Étape A : Insertion dans la table commune 'users'
         new_user = User(
-            firstname=request.form.get("firstname"),
-            lastname=request.form.get("lastname"),
-            email=request.form.get("email"),
-            creation_date=date.today(),  # Date du jour générée automatiquement
-            is_active=True,
+            firstname = request.form.get("firstname"),
+            lastname = request.form.get("lastname"),
+            email = request.form.get("email"),
+            creation_date = date.today(),  # Date du jour générée automatiquement
+            is_active = True,
         )
         db.session.add(new_user)
 
@@ -62,12 +67,12 @@ def register_user():
         match account_type:
             case "student":
                 new_student = Student(
-                    id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
-                    birth_date=date.fromisoformat(request.form.get("birth_date")),
-                    phone=request.form.get("phone"),
-                    obtained_certification=request.form.get("obtained_certification"),
-                    registration_date=date.today(),
-                    id=int(
+                    id_1 = new_user.id,  # Récupère l'ID généré par la table 'users'
+                    birth_date = date.fromisoformat(request.form.get("birth_date")),
+                    phone = request.form.get("phone"),
+                    obtained_certification = request.form.get("obtained_certification"),
+                    registration_date = date.today(),
+                    id = int(
                         request.form.get("study_level_id")
                     ),  # ID Clé étrangère vers study_level
                 )
@@ -75,23 +80,32 @@ def register_user():
 
             case "teacher": 
                 new_teacher = Teacher(
-                    id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                    specialty=request.form.get("specialty"),
-                    hire_date=date.today(),
-                    hourly_rate=float(request.form.get("hourly_rate")),
-                    biography=request.form.get("biography"),
+                    id = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    specialty = request.form.get("specialty"),
+                    hire_date = date.today(),
+                    hourly_rate = float(request.form.get("hourly_rate")),
+                    biography = request.form.get("biography"),
                 )
                 db.session.add(new_teacher)
             case "staff": 
                 new_staff = Staff(
-                    id_1= new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                    start_date= date.fromisoformat(request.form.get("start_date")),
-                    responsabilities= request.form.get("responsabilities"),
+                    id_1 = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    start_date = date.fromisoformat(request.form.get("start_date")),
+                    responsabilities = request.form.get("responsabilities"),
                     id= int(
                         request.form.get("job_id")
                     ),  # ID Clé étrangère vers job_id
                 )
                 db.session.add(new_staff)
+            case "admin": 
+                    new_admin = Admin(
+                        id_1 = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                        promotion_date = date.fromisoformat(request.form.get("promotion_date")),
+                        id = int(
+                            request.form.get("access_level_id")
+                        ),  # ID Clé étrangère vers job_id
+                    )
+                    db.session.add(new_admin)
 
         # Validation finale en base de données
         db.session.commit()
