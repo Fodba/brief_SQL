@@ -11,7 +11,7 @@
     <header class="site-header">
         <div class="container header-wrap">
             <div class="logo">
-                <a href="/"></a><img src="{{ url_for('static', filename='img/logo.svg') }}"></a>
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.svg') }}"></a>
             </div>
             <nav class="main-nav">
                 <ul>
@@ -31,19 +31,51 @@
                 <div class="tabs-nav-user">
                     <div class="tab-btn active" onclick="switchTab('student-form', this)">Étudiant</div>
                     <div class="tab-btn" onclick="switchTab('teacher-form', this)">Professeur</div>
+                    <div class="tab-btn" onclick="switchTab('staff-form', this)">Staff</div>
+                    <div class="tab-btn" onclick="switchTab('admin-form', this)">Admin</div>
                 </div>
 
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert-flash alert-{{ category }}">
+                                {{ message }}
+                                <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                            </div>
+
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 <!-- FORMULAIRE ÉTUDIANT -->
                 <div id="student-form" class="form-content active">
                     <h2>Créer un compte Étudiant</h2>
-                    <form action="/inscription/student" method="POST">
-                        <p><label>Prénom :</label><br><input type="text" name="firstname" required></p>
-                        <p><label>Nom :</label><br><input type="text" name="lastname" required></p>
-                        <p><label>Email :</label><br><input type="email" name="email" required></p>
-                        <p><label>Date de naissance :</label><br><input type="date" name="birth_date" required></p>
-                        <p><label>Téléphone :</label><br><input type="tel" name="phone"></p>
-                        <p><label>Dernière certification obtenue :</label><br><input type="text" name="obtained_certification"></p>
-                        <p><label> Niveau d'étude :</label><br>
+                    <form action="/users" method="POST">
+                        <p>
+                            <label>Prénom :</label>
+                            <input type="text" name="firstname" required>
+                        </p>
+                        <p>
+                            <label>Nom :</label>
+                            <input type="text" name="lastname" required>
+                        </p>
+                        <p>
+                            <label>Email :</label>
+                            <input type="email" name="email" required>
+                        </p>
+                        <p>
+                            <label>Date de naissance :</label>
+                            <input type="date" name="birth_date" required>
+                        </p>
+                        <p>
+                            <label>Téléphone :</label>
+                            <input type="tel" name="phone">
+                        </p>
+                        <p>
+                            <label>Dernière certification obtenue :</label>
+                            <input type="text" name="obtained_certification">
+                        </p>
+                        <p>
+                            <label> Niveau d'étude :</label>
                             <select name="study_level_id" id="study_level_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
                                 <option value="" disabled selected>-- Sélectionnez votre niveau --</option>
                                 
@@ -61,7 +93,7 @@
                 <!-- FORMULAIRE PROFESSEUR -->
                 <div id="teacher-form" class="form-content">
                     <h2>Créer un compte Enseignant</h2>
-                    <form action="/inscription/teacher" method="POST">
+                    <form action="/users/teacher" method="POST">
                         <p><label>Prénom :</label><br><input type="text" name="firstname" required></p>
                         <p><label>Nom :</label><br><input type="text" name="lastname" required></p>
                         <p><label>Email :</label><br><input type="email" name="email" required></p>
@@ -70,6 +102,14 @@
                         <p><label>Biographie :</label><br><textarea name="biography" rows="4" style="width: 100%;"></textarea></p>
                         <button type="submit" style="background-color: #2ecc71; color: white; padding: 10px 15px; border: none; cursor: pointer;">S'inscrire comme Professeur</button>
                     </form>
+                </div>
+
+                 <!-- FORMULAIRE STAFF -->
+                <div id="staff-form" class="form-content">
+                </div>
+
+                 <!-- FORMULAIRE ADMIN -->
+                <div id="admin-form" class="form-content">
                 </div>
             </main>
             
