@@ -37,24 +37,42 @@ Installer le fichier requirements.txt
 
 
 ## Structure
+#### Projet
 ```
 brief_SQL/
 │
-├── .env
-├── main.py                 # Script principal (création de la base, etc.)
+├── .env                        # Env file , different on all user
+├── _.env_example               # Example of .env file
+├── main.py                     # Principal script(Lunch create database)
+├── data.py                     # Data script (Add some value in all tables)
+└── MCD/
+    ├── Diagramme_Classes.JPG   # Picture of Classes diagram
+    ├── looping_mcd.loo         # Binary file for looping Software
+    ├── MCD.JPG                 # Picture of MCD diagram
 └── models/
-    ├── __init__.py         # Importe Base et tous les modèles
-    ├── base.py             # Contient la déclaration de Base
-    ├── access_level.py     # Classe AccessLevel
-    ├── admin.py            # Classe Admin
-    ├── classroom.py        # Classe Classroom
-    ├── job.py              # Classe Job
-    ├── registration.py     # Classe Registration
-    ├── role.py             # Classe Role
-    ├── session.py          # Classe Session
-    ├── staff.py            # Classe Staff
-    ├── student.py          # Classe Student
-    ├── study_level.py      # Classe StudyLevel
-    ├── teacher.py          # Classe Teacher
-    ├── user.py             # Classe User
+    ├── __init__.py             # Importe Base et tous les modèles
+    ├── base.py                 # Contient la déclaration de Base
+    ├── access_level.py         # Classe AccessLevel
+    ├── admin.py                # Classe Admin
+    ├── classroom.py            # Classe Classroom
+    ├── job.py                  # Classe Job
+    ├── registration.py         # Classe Registration
+    ├── role.py                 # Classe Role
+    ├── session.py              # Classe Session
+    ├── staff.py                # Classe Staff
+    ├── student.py              # Classe Student
+    ├── study_level.py          # Classe StudyLevel
+    ├── teacher.py              # Classe Teacher
+    ├── user.py                 # Classe User
+└── shemas/
+    ├──                         # 
+    ├──                         # 
+    ├──                         # 
+└── Readme.md
+└── requierements.txt           # File for Python depedencies
 ```
+
+#### MCD
+![MCD](./MCD/MCD.JPG)
+
+#### Diagrame des cas d'utilisations
