@@ -120,10 +120,47 @@ a {
 
 h2{font-size:1.25rem}
 
-
-
 .logo img{
     width: 160px;
+}
+
+.menu{
+    list-style: none;
+    display: inline-flex;
+    flex-flow: row;
+    width: 100%;
+    justify-content: space-around;
+    margin: 1rem 0;
+}
+
+.menu li{
+    width: 20%;
+    min-height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu li:hover{
+    background-color: #c7d1f0;
+}
+
+.menu li a{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.menu img{
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
 }
 
 .list-users{
