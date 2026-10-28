@@ -2,7 +2,7 @@ from datetime import date
 import os
 import sys
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 path_projet = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -20,30 +20,11 @@ app = Flask(__name__)
 
 # --- Connexion base de données ---
 app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('PG_USER')}:{os.getenv('PG_PASSWORD')}@{os.getenv('PG_HOST')}:{os.getenv('PG_PORT')}/{os.getenv('PG_DATABASE')}"
-
+# Ajoutez une clé secrète (obligatoire pour utiliser flash)
+app.config["SECRET_KEY"] = "une_cle_secrete_tres_securisee"
 
 # Initialisation de l'extension
 db = SQLAlchemy(app)
-
-with app.app_context():
-    # Vous mappez votre classe Python à la table existante
-    class Users(db.Model):
-        # Indiquez le nom exact de la table dans votre BDD
-        __tablename__ = "users"
-
-        # Déclarez au moins la clé primaire et les colonnes à utiliser
-        id = db.Column(db.Integer, primary_key=True)
-        firstname = db.Column(db.String)
-        lastname = db.Column(db.String)
-        email = db.Column(db.String)
-
-    class StudyLevel(db.Model):
-        # Indiquez le nom exact de la table dans votre BDD
-        __tablename__ = "study_level"
-        id = db.Column(db.Integer, primary_key=True)
-        label = db.Column(db.String)
-
-
 
 
 @app.route("/")
@@ -52,13 +33,13 @@ def index():
 
 @app.route("/users", methods=["GET"])
 def list_users():
-    all_users =  Users.query.order_by(Users.id.desc()).limit(5).all()
-    study_level = StudyLevel.query.all()
+    all_users = db.session.query(User).order_by(User.id.desc()).limit(5).all()
+    study_levels = db.session.query(StudyLevel).all()
     # On envoie la liste des produits au fichier HTML
-    return render_template("users.html", all_users= all_users, study_level= study_level)
+    return render_template("users.html", all_users= all_users, study_level= study_levels)
 
 
-@app.route("/users/student", methods=["POST"])
+@app.route("/users", methods=["POST"])
 def register_student():
     try:
         # Étape A : Insertion dans la table commune 'users'
@@ -89,11 +70,17 @@ def register_student():
 
         # Validation finale des deux opérations en base de données
         db.session.commit()
-        return redirect(url_for("success"))
+        flash(
+            "Inscription réussie ! Votre compte Étudiant a été enregistré en base de données.",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une page blanche
+        return redirect(url_for("list_users"))
 
     except Exception as e:
         db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
-        return f"Erreur lors de l'inscription de l'étudiant : {str(e)}", 400
+        flash(f"Erreur lors de l'inscription de l'étudiant : {str(e)}", "danger")
+        return redirect(url_for("list_users"))
 
 
 # ==========================================
@@ -127,12 +114,17 @@ def register_teacher():
 
         # Validation finale en base de données
         db.session.commit()
-        return redirect(url_for("success"))
+        flash(
+            "Inscription réussie ! Votre compte Professeur a été enregistré en base de données.",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une page blanche
+        return redirect(url_for("list_users"))
 
     except Exception as e:
         db.session.rollback()  # Sécurité : annule la transaction si une erreur survient
-        return f"Erreur lors de l'inscription du professeur : {str(e)}", 400
-
+        flash(f"Erreur lors de l'inscription du professeur : {str(e)}", "danger")
+        return redirect(url_for("list_users"))
 
 
 
