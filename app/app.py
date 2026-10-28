@@ -43,21 +43,23 @@ def manage_users():
 def register_user():
     account_type = request.form.get("account_type")
 
-    if account_type == "student":
-        try:
-            # Étape A : Insertion dans la table commune 'users'
-            new_user = User(
-                firstname=request.form.get("firstname"),
-                lastname=request.form.get("lastname"),
-                email=request.form.get("email"),
-                creation_date=date.today(),  # Date du jour générée automatiquement
-                is_active=True,
-            )
-            db.session.add(new_user)
+    
 
-            # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
-            db.session.flush()
+    try:
+        # Étape A : Insertion dans la table commune 'users'
+        new_user = User(
+            firstname=request.form.get("firstname"),
+            lastname=request.form.get("lastname"),
+            email=request.form.get("email"),
+            creation_date=date.today(),  # Date du jour générée automatiquement
+            is_active=True,
+        )
+        db.session.add(new_user)
 
+        # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
+        db.session.flush()
+
+        if account_type == "student":
             # Étape B : Liaison et insertion dans la table spécifique 'students'
             new_student = Student(
                 id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
@@ -70,35 +72,8 @@ def register_user():
                 ),  # ID Clé étrangère vers study_level
             )
             db.session.add(new_student)
-
-            # Validation finale des deux opérations en base de données
-            db.session.commit()
-            flash(
-                "Inscription réussie ! Votre compte Étudiant a été enregistré en base de données.",
-                "success",
-            )
-            # 3. On redirige sur la page du formulaire au lieu d'une page blanche
-            return redirect(url_for("manage_users"))
-
-        except Exception as e:
-            db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
-            flash(f"Erreur lors de l'inscription de l'étudiant : {str(e)}", "danger")
-            return redirect(url_for("manage_users"))
-    elif account_type == "teacher":
-        try:
-            # Étape A : Insertion dans la table commune 'users'
-            new_user = User(
-                firstname=request.form.get("firstname"),
-                lastname=request.form.get("lastname"),
-                email=request.form.get("email"),
-                creation_date=date.today(),
-                is_active=True,
-            )
-            db.session.add(new_user)
-    
-            # On force la génération de l'ID utilisateur
-            db.session.flush()
-    
+            
+        elif account_type == "teacher":
             # Étape B : Liaison et insertion dans la table spécifique 'teachers'
             new_teacher = Teacher(
                 id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
@@ -108,21 +83,20 @@ def register_user():
                 biography=request.form.get("biography"),
             )
             db.session.add(new_teacher)
-    
-            # Validation finale en base de données
-            db.session.commit()
-            flash(
-                "Inscription réussie ! Votre compte Professeur a été enregistré en base de données.",
-                "success",
-            )
-            # 3. On redirige sur la page du formulaire au lieu d'une autre page
-            return redirect(url_for("manage_users"))
-    
-        except Exception as e:
-            db.session.rollback()  # Sécurité : annule la transaction si une erreur survient
-            flash(f"Erreur lors de l'inscription du professeur : {str(e)}", "danger")
-            return redirect(url_for("manage_users"))
-    
+
+        # Validation finale en base de données
+        db.session.commit()
+        flash(
+            "Inscription réussie ! Votre compte a été enregistré en base de données.",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une autre page
+        return redirect(url_for("manage_users"))
+    except Exception as e:
+        db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
+        flash(f"Erreur lors de l'inscription : {str(e)}", "danger")
+        return redirect(url_for("manage_users"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
