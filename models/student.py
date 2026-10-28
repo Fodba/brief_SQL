@@ -12,8 +12,8 @@ class Student(Base):
         ForeignKey("users.id"), primary_key=True
     )  # PK et FK vers users
     birth_date: Mapped[date] = mapped_column(Date, nullable=False)
-    phone: Mapped[str] = mapped_column(String(50), nullable=False)
-    obtained_certification: Mapped[str] = mapped_column(String(50), nullable=False)
+    phone: Mapped[str] = mapped_column(String(50))
+    obtained_certification: Mapped[str] = mapped_column(String(50))
     registration_date: Mapped[date] = mapped_column(Date, nullable=False)
     id: Mapped[int] = mapped_column(
         ForeignKey("study_level.id"), nullable=False

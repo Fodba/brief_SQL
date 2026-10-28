@@ -12,7 +12,6 @@ from .base import Base
 from .access_level import AccessLevel
 from .classroom import Classroom
 from .job import Job
-from .role import Role
 from .study_level import StudyLevel
 
 # 3. Tables dépendantes de niveau 1 (ex: User dépend de Role)

@@ -9,7 +9,6 @@ class Admin(Base):
     id_1: Mapped[int] = mapped_column(
         ForeignKey("users.id"), primary_key=True
     )  # PK et FK vers users
-    access_level: Mapped[str] = mapped_column(String(50), nullable=False)
     promotion_date: Mapped[date] = mapped_column(Date, nullable=False)
     id: Mapped[int] = mapped_column(
         ForeignKey("access_level.id"), nullable=False

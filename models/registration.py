@@ -7,13 +7,13 @@ from .base import Base
 class Registration(Base):
     __tablename__ = "registrations"
 
-    id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     register_date: Mapped[date] = mapped_column(Date, nullable=False)
     presence: Mapped[Optional[bool]] = mapped_column(Boolean)
     status: Mapped[str] = mapped_column(
         Enum(
-            "ENREGISTRE",
-            "DESCRIPTION",
+            "ENREGISTRÉ",
+            "DÉSINSCRIT",
             "EN_ATTENTE",
             name="registration_status_enum",
         ),
@@ -29,4 +29,3 @@ class Registration(Base):
     # Relations
     student: Mapped["Student"] = relationship(back_populates="registrations")
     session: Mapped["Session"] = relationship(back_populates="registrations")
-    

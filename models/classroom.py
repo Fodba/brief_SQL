@@ -6,7 +6,7 @@ from .base import Base
 class Classroom(Base):
   __tablename__ = "classroom"
 
-  id: Mapped[str] = mapped_column(String(50), primary_key=True)
+  id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
   name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
   capacity: Mapped[int] = mapped_column(nullable=False)
   location: Mapped[str] = mapped_column(String(50), nullable=False)

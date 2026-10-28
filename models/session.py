@@ -15,10 +15,10 @@ class Session(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     status: Mapped[str] = mapped_column(
-        Enum("OPEN", "CLOSED", "ARCHIVED", name="session_status_enum"),
+        Enum("OUVERT", "FERMÉ", "ARCHIVÉ", name="session_status_enum"),
         nullable=False,
     )
-    title: Mapped[Optional[str]] = mapped_column(String(100))
+    title: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text)
     start_date: Mapped[date] = mapped_column(Date, nullable=False)
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
