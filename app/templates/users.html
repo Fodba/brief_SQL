@@ -141,6 +141,35 @@
 
         <!-- FORMULAIRE ADMIN -->
     <div id="admin-form" class="form-content">
+         <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Droits</label>
+                <select name="access_level_id" id="access_level_id" required>
+                    <option value="" disabled selected>-- Sélectionnez les droits --</option>
+                    {% for access in access_list %}
+                        <option value="{{ access.id }}">{{ access.label }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            
+            <p>
+                <label>Date d'attribution :</label>
+                <input type="date" name="promotion_date" required>
+            </p>
+            <button type="submit" class="btn" value="admin" name="account_type">Envoyer</button>
+        </form>
     </div>
 
      <script>
