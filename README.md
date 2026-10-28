@@ -1,36 +1,44 @@
 # brief_SQL
 
-## Technique Postgres
+## Contributeurs
++ Mauro Fadika
++ Audric Gaillard
++ Jocelyne Minard
 
-Pour qu'un utilisateur puisse accéder a la base Postgres : 
-Connecter vous à Postgres : 
+
+## Prérequis Techniques
+#### Postgres
+
+Pour qu'un utilisateur puisse accéder a la base Postgres :   
+
+1. Connecter vous à Postgres : 
 ```sudo -u postgres psql  ```
 
-```
--- 1. Si l'utilisateur 'joce' n'existe pas encore, créez-le avec un mot de passe :
-CREATE USER user_name WITH PASSWORD 'votre_mot_de_passe_securise';
+2. Si l'utilisateur 'user_name' n'existe pas encore, créez-le avec un mot de passe :
+```CREATE USER user_name WITH PASSWORD 'password';```  
 
--- OU 2. S'il existe déjà mais n'a pas de mot de passe, définissez-en un :
-ALTER USER user_name WITH PASSWORD 'votre_mot_de_passe_securise';
+3. S'il existe déjà mais n'a pas de mot de passe, définissez-en un :
+```ALTER USER user_name WITH PASSWORD 'password';```  
 
--- 3. Donnez-lui le droit de créer des bases de données (très utile pour votre script) :
-ALTER USER user_name CREATEDB;
+4. Donnez-lui le droit de créer des bases de données (très utile pour votre script) :
+```ALTER USER user_name CREATEDB;```  
 
--- 4. Donnez-lui l'accès à la base de données 'postgres' par défaut :
-GRANT CONNECT ON DATABASE postgres TO user_name;
-```
+5. Donnez-lui l'accès à la base de données 'postgres' par défaut :
+```GRANT CONNECT ON DATABASE postgres TO user_name;```  
 
-Verifier les mode de connection de postgres
-```
-sudo vim pg_hba.conf
-```
+6. Verifier les modes de connection de postgres et modifier **peer** par **scram-sha-256**
+```sudo vim pg_hba.conf```  
 
-Modifier peer par scram-sha-256
+#### Python
+Installer le fichier requirements.txt
+``` pip install -r requierements.txt```
+
+
 
 
 ## Structure
-
-mon_projet/
+```
+brief_SQL/
 │
 ├── .env
 ├── main.py                 # Script principal (création de la base, etc.)
@@ -49,3 +57,4 @@ mon_projet/
     ├── study_level.py      # Classe StudyLevel
     ├── teacher.py          # Classe Teacher
     ├── user.py             # Classe User
+```
