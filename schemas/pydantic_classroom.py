@@ -3,10 +3,10 @@ class Classroom(BaseModel):
     """Classe représentant une salle de classe"""
 
     name:str = Field(min_length=1, max_length=50) # au moins 1 caractère, mais pas plus de 50 caractères
-    capacity:int
+    capacity:int = Field(ge=1) # doit être égal ou valoir plus que 1
     location:str = Field(min_length=1, max_length=50) # au moins 1 caractère, mais pas plus de 50 caractères
     is_active:bool=True # True par défaut
-    equipment:str
+    equipments:str
 
     @field_validator("name", "location")
     @classmethod
@@ -16,7 +16,7 @@ class Classroom(BaseModel):
     
 if __name__ == "__main__":
     try:
-        print(Classroom(name="Salle informatique", capacity=17, location="Salle 201", equipment="PC, projecteur, souris"))
+        print(Classroom(name="Salle informatique", capacity=1, location="salle 201", equipments="PC, projecteur, souris"))
     except ValidationError as e:
         print(e)
 
