@@ -76,3 +76,22 @@ brief_SQL/
 ![MCD](./MCD/MCD.JPG)
 
 #### Diagrame des cas d'utilisations
+
+
+## Choix techniques
+
+#### SQLAlchemy 
+Nous avons decider de partir sur SQLAlchemy car celui-ci reste un standard et est trés bien documenté.
+De plus cela nous à parut plus simple pou séparer les modèles et les schémas de Pydantic.
+Dans les différentes documentatins que nous aons pu lire il se trouve également qu'il y a moins de bug que sur SQLModel.
+
+#### Postgres
+Nous sommes parti sur Postgres car nous voulions implémenter un vrai SGBD et le manipuler, puisque nous avons déjà vu SQLite pour Python auparavant.  
+Postgres c'est imposer face à MariaDb puisque pour certains nous avons renconter des soucis d'installation avec Mariadb, ou ensuite une difficulté à implenter les connections en Python malgrès le cours sur le sujet.
+
+#### Looping
+Mauro ayant de l'experience avec ce logiciel, c'est tout naturellement que nous l'avons utiliser pour réaliser le MCD
+
+#### Mermaid
+Logiciel vu en formation, nous avons utiliser le live editor qui reste gratuit car nous n'avions pas besoin de fonctionnalitées poussées. 
+
