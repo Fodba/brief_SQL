@@ -121,6 +121,13 @@ def register_user():
         flash(f"Erreur lors de l'inscription : {str(e)}", "danger")
         return redirect(url_for("manage_users"))
 
+@app.route("/study")
+def study():
+   return render_template("study.html")
+
+@app.route("/admin")
+def admin():
+   return render_template("admin.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

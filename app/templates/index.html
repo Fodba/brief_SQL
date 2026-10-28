@@ -3,6 +3,27 @@
 {% block content %}
     <h1>CFTech</h1>
     <p>Votre centre de formation cours et ateliers sur les technologies numériques</p>
+
+    <ul class="menu">
+        <li>
+            <a href="{{ url_for('manage_users') }}">
+                <img src="{{ url_for('static', filename='img/users.svg') }}">
+                <p>Utilisateurs</p>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('study') }}">
+                <img src="{{ url_for('static', filename='img/study.svg') }}">
+                <p>Niveau d'étude</p>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('admin') }}">
+                <img src="{{ url_for('static', filename='img/admin.svg') }}">
+                <p>Admin</p>
+            </a>
+        </li>
+    </ul>
 {% endblock %}
 {% block aside %}    
     <h3>Actualitées</h3>
