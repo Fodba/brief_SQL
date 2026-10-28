@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CFTech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-wrap">
+            <div class="logo">
+                <a href="/"></a><img src="{{ url_for('static', filename='img/logo.svg') }}"></a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/users">Utisitateurs</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container site-content">
+        <div class="main-layout">
+
+            <main class="main-content">
+                <h1>CFTech</h1>
+                <p>Votre centre de formation cours et ateliers sur les technologies numériques</p>
+            </main>
+            
+            <aside class="sidebar">
+                <h3>Actualitées</h3>
+                <p>En construction</p>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-wrap">
+            <p>&copy; 2026 CFTech. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
