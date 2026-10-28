@@ -35,15 +35,14 @@ def index():
 def manage_users():
     all_users = db.session.query(User).order_by(User.id.desc()).limit(5).all()
     study_levels = db.session.query(StudyLevel).all()
+    job_list = db.session.query(Job).all()
     # On envoie la liste des produits au fichier HTML
-    return render_template("users.html", all_users= all_users, study_level= study_levels)
+    return render_template("users.html", all_users= all_users, study_level= study_levels, job_list= job_list)
 
 
 @app.route("/users", methods=["POST"])
 def register_user():
     account_type = request.form.get("account_type")
-
-    
 
     try:
         # Étape A : Insertion dans la table commune 'users'
@@ -59,30 +58,40 @@ def register_user():
         # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
         db.session.flush()
 
-        if account_type == "student":
-            # Étape B : Liaison et insertion dans la table spécifique 'students'
-            new_student = Student(
-                id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
-                birth_date=date.fromisoformat(request.form.get("birth_date")),
-                phone=request.form.get("phone"),
-                obtained_certification=request.form.get("obtained_certification"),
-                registration_date=date.today(),
-                id=int(
-                    request.form.get("study_level_id")
-                ),  # ID Clé étrangère vers study_level
-            )
-            db.session.add(new_student)
-            
-        elif account_type == "teacher":
-            # Étape B : Liaison et insertion dans la table spécifique 'teachers'
-            new_teacher = Teacher(
-                id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                specialty=request.form.get("specialty"),
-                hire_date=date.today(),
-                hourly_rate=float(request.form.get("hourly_rate")),
-                biography=request.form.get("biography"),
-            )
-            db.session.add(new_teacher)
+        # Étape B : Liaison et insertion dans les tables spécifiques
+        match account_type:
+            case "student":
+                new_student = Student(
+                    id_1=new_user.id,  # Récupère l'ID généré par la table 'users'
+                    birth_date=date.fromisoformat(request.form.get("birth_date")),
+                    phone=request.form.get("phone"),
+                    obtained_certification=request.form.get("obtained_certification"),
+                    registration_date=date.today(),
+                    id=int(
+                        request.form.get("study_level_id")
+                    ),  # ID Clé étrangère vers study_level
+                )
+                db.session.add(new_student)
+
+            case "teacher": 
+                new_teacher = Teacher(
+                    id=new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    specialty=request.form.get("specialty"),
+                    hire_date=date.today(),
+                    hourly_rate=float(request.form.get("hourly_rate")),
+                    biography=request.form.get("biography"),
+                )
+                db.session.add(new_teacher)
+            case "staff": 
+                new_staff = Staff(
+                    id_1= new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    start_date= date.fromisoformat(request.form.get("start_date")),
+                    responsabilities= request.form.get("responsabilities"),
+                    id= int(
+                        request.form.get("job_id")
+                    ),  # ID Clé étrangère vers job_id
+                )
+                db.session.add(new_staff)
 
         # Validation finale en base de données
         db.session.commit()
@@ -92,6 +101,7 @@ def register_user():
         )
         # 3. On redirige sur la page du formulaire au lieu d'une autre page
         return redirect(url_for("manage_users"))
+    
     except Exception as e:
         db.session.rollback()  # Annule tout en cas d'erreur (évite les données orphelines)
         flash(f"Erreur lors de l'inscription : {str(e)}", "danger")

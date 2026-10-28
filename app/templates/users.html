@@ -52,7 +52,7 @@
             </p>
             <p>
                 <label> Niveau d'étude :</label>
-                <select name="study_level_id" id="study_level_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <select name="study_level_id" id="study_level_id" required>
                     <option value="" disabled selected>-- Sélectionnez votre niveau --</option>
                     
                     {# Boucle Jinja pour générer les options à partir de la base de données #}
@@ -70,18 +70,73 @@
     <div id="teacher-form" class="form-content">
         <h2>Créer un compte Enseignant</h2>
         <form action="/users" method="POST">
-            <p><label>Prénom :</label><br><input type="text" name="firstname" required></p>
-            <p><label>Nom :</label><br><input type="text" name="lastname" required></p>
-            <p><label>Email :</label><br><input type="email" name="email" required></p>
-            <p><label>Spécialité :</label><br><input type="text" name="specialty" required></p>
-            <p><label>Taux horaire (€) :</label><br><input type="number" step="0.01" name="hourly_rate" required></p>
-            <p><label>Biographie :</label><br><textarea name="biography" rows="4" style="width: 100%;"></textarea></p>
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Spécialité :</label>
+                <input type="text" name="specialty" required>
+            </p>
+            <p>
+                <label>Taux horaire (€) :</label>
+                <input type="number" step="0.01" name="hourly_rate" required>
+            </p>
+            <p>
+                <label>Biographie :</label>
+                <textarea name="biography" rows="4"></textarea>
+            </p>
             <button type="submit" class="btn" value="teacher" name="account_type">Envoyer</button>
         </form>
     </div>
 
         <!-- FORMULAIRE STAFF -->
     <div id="staff-form" class="form-content">
+        <h2>Créer un compte Equipe pédagoquique</h2>
+        <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Responsabilités :</label>
+                <textarea name="responsabilities" rows="4"></textarea>
+            </p>
+            <p>
+                <label>Poste</label>
+                <select name="job_id" id="job_id" required>
+                    <option value="" disabled selected>-- Sélectionnez votre travail --</option>
+                    
+                    {# Boucle Jinja pour générer les options à partir de la base de données #}
+                    {% for job in job_list %}
+                        <option value="{{ job.id }}">{{ job.label }}</option>
+                    {% endfor %}
+                    
+                </select>
+            </p>
+            
+            <p>
+                <label>Date de début :</label>
+                <input type="date" name="start_date" required>
+            </p>
+            <button type="submit" class="btn" value="staff" name="account_type">Envoyer</button>
+        </form>
     </div>
 
         <!-- FORMULAIRE ADMIN -->
