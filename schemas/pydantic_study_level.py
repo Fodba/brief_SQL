@@ -7,7 +7,7 @@ class StudyLevel(BaseModel):
     @field_validator("label")
     @classmethod
     def label_propre(cls, valeur: str)-> str:
-        """Renvoie le label avec une majuscule"""
+        """Renvoie le niveau d'études au propre"""
         return valeur.capitalize()
 
 if __name__ == "__main__":

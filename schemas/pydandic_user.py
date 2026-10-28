@@ -2,7 +2,7 @@ from pydantic import BaseModel, ValidationError, Field, field_validator, EmailSt
 from datetime import date, datetime
 
 class User(BaseModel):
-    """Classe représentant un niveau utilisateur."""
+    """Classe représentant un utilisateur."""
 
     # Field(min_length=1, max_length=50) --> le nom et prénom doivent au moins comporter un caractère, mais pas
     # plus de 50 caractère
@@ -13,7 +13,7 @@ class User(BaseModel):
 
     # datetime.now().strftime("%Y/%m/%d") --> si aucune valeur n'est fournie, prend la date d'aujourd'hui et le
     # restitue sous le format : 2026-10-28
-    creation_date:date=datetime.now().strftime("%Y")
+    creation_date:date=datetime.now().strftime("%Y-%m-%d")
     is_active:bool=True # Par défaut : is_active est True
     
 
@@ -24,7 +24,7 @@ class User(BaseModel):
         """Renvoie le nom et prénom au propre sans chiffre"""
         if any(caractere.isdigit() for caractere in valeur):
             raise ValueError("Ne doit pas contenir de chiffre")
-        return valeur.capitalize()
+        return valeur.title()
 
     @field_validator("email")
     @classmethod
@@ -35,7 +35,7 @@ class User(BaseModel):
 
 if __name__ == "__main__":
     try:
-        new_user=User(lastname="gaillard", firstname="audric", email="AUDRIC.GAILLARD97@gmail.com")
+        new_user=User(lastname="gaillard", firstname="audric", email="AUDRIC.GAILLARD97@gmail.com", id_1=1)
         print(new_user)
     except ValidationError as e:
         print(e)
