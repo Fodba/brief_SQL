@@ -1,14 +1,13 @@
 from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date, datetime
-from decimal import Decimal
 
 class Staff(BaseModel):
     """Classe représentant un membre du staff"""
     id_1:int
-    job:str=Field(min_length=1, max_length=50)
     start_date:date
     responsabilities:str
     id:int
+
 
     @field_validator("start_date", mode="before")
     @classmethod
@@ -21,6 +20,6 @@ class Staff(BaseModel):
 
 if __name__ == "__main__":
     try:
-        print(Staff(id_1 = 4, job="Ménage", start_date="27/10/2026", responsabilities="Nettoyer les toilettes", id=3))
+        print(Staff(id_1 = 4, start_date="27/10/2026", responsabilities="Nettoyer les toilettes", id=3))
     except ValidationError as e:
         print(e)
