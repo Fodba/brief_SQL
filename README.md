@@ -77,17 +77,27 @@ brief_SQL/
 
 #### Diagrame des cas d'utilisations
 
+![MCD](./MCD/DCU.JPG)
 
 ## Choix techniques
 
 #### SQLAlchemy 
-Nous avons decider de partir sur SQLAlchemy car celui-ci reste un standard et est trés bien documenté.
-De plus cela nous à parut plus simple pou séparer les modèles et les schémas de Pydantic.
-Dans les différentes documentatins que nous aons pu lire il se trouve également qu'il y a moins de bug que sur SQLModel.
+Nous avons decider de partir sur SQLAlchemy car celui-ci reste un standard et est très bien documenté.
+De plus cela nous à paru plus simple pour séparer les modèles et les schémas de Pydantic.
+Dans les différentes documentations que nous avons pu lire il se trouve également qu'il y a moins de bug que sur SQLModel.
 
 #### Postgres
 Nous sommes parti sur Postgres car nous voulions implémenter un vrai SGBD et le manipuler, puisque nous avons déjà vu SQLite pour Python auparavant.  
-Postgres c'est imposer face à MariaDb puisque pour certains nous avons renconter des soucis d'installation avec Mariadb, ou ensuite une difficulté à implenter les connections en Python malgrès le cours sur le sujet.
+Postgres s'est imposé face à MariaDb puisque pour certains nous avons rencontré des soucis d'installation avec Mariadb, ou ensuite une difficulté à implémenter les connections en Python malgrès le cours sur le sujet.
+
+#### Alembic
+Alembic est l'outil de migration associé à SQLAlchemy. Il versionne le schéma de la base : chaque évolution est décrite dans un fichier de migration, appliquée dans l'ordre, et peut être annulée. Cela permet de faire évoluer la base sans la recréer et sans perdre les données existantes.
+
+##### Migrations du projet
+001: Création des tables
+002: Modification du champs `equipments`de la table `Classroom` de str à json.
+
+La table Session contient déjà un champs `statut` et le role `SUPERADMIN` est une valeur entrée dans la table `access_level`.
 
 #### Looping
 Mauro ayant de l'experience avec ce logiciel, c'est tout naturellement que nous l'avons utiliser pour réaliser le MCD
