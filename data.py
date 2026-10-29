@@ -9,22 +9,22 @@ from models import (
     User, Admin, Staff, Student, Teacher, Session, Registration
 )
 
-load_dotenv()
-
-# Connect PostgreSQL 
-cursor, conn_pg = connect(os.getenv("PG_DATABASE"), "SELECT version()")
-url_pg = (
-    f"postgresql+psycopg2://{os.getenv('PG_USER')}:{os.getenv('PG_PASSWORD')}"
-    f"@{os.getenv('PG_HOST')}:{os.getenv('PG_PORT')}/{os.getenv('PG_DATABASE')}"
-)
-
-if conn_pg:
-    engine = create_engine(url_pg)
-
-# Create session for prepare multiple query before send to DB
-SessionLocal = sessionmaker(bind=engine)
-
 def add_data():
+    load_dotenv()
+
+    # Connect PostgreSQL 
+    cursor, conn_pg = connect(os.getenv("PG_DATABASE"), "SELECT version()")
+    url_pg = (
+        f"postgresql+psycopg2://{os.getenv('PG_USER')}:{os.getenv('PG_PASSWORD')}"
+        f"@{os.getenv('PG_HOST')}:{os.getenv('PG_PORT')}/{os.getenv('PG_DATABASE')}"
+    )
+
+    if conn_pg:
+        engine = create_engine(url_pg)
+
+    # Create session for prepare multiple query before send to DB
+    SessionLocal = sessionmaker(bind=engine)
+
     with SessionLocal() as session:
         # Try to make transaction, else rollback
         try:
@@ -151,8 +151,8 @@ def add_data():
             print(f"❌ Annulation de la transaction suite à une erreur : {e}")
             raise e
         
-cursor.close()
-conn_pg.close()
+    cursor.close()
+    conn_pg.close()
 
 if __name__ == "__main__":
     add_data()
