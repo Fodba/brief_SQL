@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, model_validator
+from pydantic import BaseModel, ValidationError, Field, field_validator, model_validator, ConfigDict
 from datetime import date, datetime
 from typing import Literal
 class Session(BaseModel):
@@ -14,6 +14,8 @@ class Session(BaseModel):
     prerequisite : str|None=None
     id_1:int
     id_2:int
+
+    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("start_date", "end_date", mode="before")
     @classmethod

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, ValidationError, field_validator, ConfigDict
 from datetime import date, datetime
 
 class Admin(BaseModel):
@@ -7,6 +7,8 @@ class Admin(BaseModel):
     id_1:int
     promotion_date:date
     id:int
+
+    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("promotion_date", mode="before")
     @classmethod

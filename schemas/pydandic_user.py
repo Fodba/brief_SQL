@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, EmailStr
+from pydantic import BaseModel, ValidationError, Field, field_validator, EmailStr, ConfigDict
 from datetime import date, datetime
 
 class User(BaseModel):
@@ -9,13 +9,13 @@ class User(BaseModel):
     lastname:str = Field(min_length=1, max_length=50)
     firstname:str = Field(min_length=1, max_length=50)
 
-    email:EmailStr = Field(max_length=255) # EmailStr : vérifie qu'un mail est correct (ex : AUDRIC.GAILLARD97 n'est pas valide")
+    email:EmailStr = Field(max_length=16) # EmailStr : vérifie qu'un mail est correct (ex : AUDRIC.GAILLARD97 n'est pas valide")
 
     # date.today() --> si aucune valeur n'est fournie, prend la date d'aujourd'hui
     creation_date:date=date.today()
     is_active:bool=True # Par défaut : is_active est True
-    
 
+    model_config=ConfigDict(from_attributes=True)
 
     @field_validator("lastname", "firstname")
     @classmethod

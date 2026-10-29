@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator
+from pydantic import BaseModel, ValidationError, Field, field_validator, ConfigDict
 class Classroom(BaseModel):
     """Classe représentant une salle de classe"""
 
@@ -7,6 +7,8 @@ class Classroom(BaseModel):
     location:str = Field(min_length=1, max_length=50) # au moins 1 caractère, mais pas plus de 50 caractères
     is_active:bool=True # True par défaut
     equipments:str
+
+    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("name", "location")
     @classmethod
