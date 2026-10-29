@@ -1,11 +1,9 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ValidationError, Field, field_validator
 class AccessLevel(BaseModel):
     """Classe représentant le niveau d'accès d'un admin."""
 
     # Field(min_length=1, max_length=50) --> au moins un caractère dans le champ, mais pas plus de 50 caractère
     label:str = Field(min_length=1, max_length=50)
-
-    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("label")
     @classmethod

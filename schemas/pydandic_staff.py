@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, field_validator, ConfigDict
+from pydantic import BaseModel, ValidationError, field_validator
 from datetime import date, datetime
 
 class Staff(BaseModel):
@@ -8,9 +8,6 @@ class Staff(BaseModel):
     responsabilities:str
     id:int
 
-    model_config=ConfigDict(from_attributes=True)
-
-    
     @field_validator("start_date", mode="before")
     @classmethod
     def accepter_date_francaise(cls, valeur):

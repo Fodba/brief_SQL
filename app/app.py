@@ -1,9 +1,11 @@
+import sys
 from datetime import date
 import os
 import sys
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+
 
 path_projet = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -14,6 +16,10 @@ from models import (
     Base, AccessLevel, Classroom, Job, StudyLevel, 
     User, Admin, Staff, Student, Teacher, Session, Registration
 )
+
+from schemas import (pydandic_registration, pydantic_teacher, pydantic_study_level,
+pydantic_student, pydantic_session, pydantic_classroom, pydantic_admin, pydandic_user,
+pydandic_staff, pydandic_job, pydantic_access_level)
 
 load_dotenv()
 app = Flask(__name__)
@@ -51,61 +57,80 @@ def register_user():
 
     try:
         # Étape A : Insertion dans la table commune 'users'
-        new_user = User(
-            firstname = request.form.get("firstname"),
-            lastname = request.form.get("lastname"),
-            email = request.form.get("email"),
-            creation_date = date.today(),  # Date du jour générée automatiquement
-            is_active = True,
-        )
+
+        # On met les données dans un dictionnaire
+        data = {
+            "firstname" : request.form.get("firstname"),
+            "lastname" : request.form.get("lastname"),
+            "email" : request.form.get("email"),
+            "creation_date" : date.today(),  # Date du jour générée automatiquement
+            "is_active" : True
+        }
+        
+        # On passe les données dans le modèle Pydantic pour les vérifier
+        validate = pydandic_user.User(**data)
+        new_user = User(**validate.model_dump())
         db.session.add(new_user)
+        db.session.flush()
 
         # On force SQLAlchemy à générer l'ID de l'utilisateur sans valider définitivement la transaction
-        db.session.flush()
+        
 
         # Étape B : Liaison et insertion dans les tables spécifiques
         match account_type:
             case "student":
-                new_student = Student(
-                    id_1 = new_user.id,  # Récupère l'ID généré par la table 'users'
-                    birth_date = date.fromisoformat(request.form.get("birth_date")),
-                    phone = request.form.get("phone"),
-                    obtained_certification = request.form.get("obtained_certification"),
-                    registration_date = date.today(),
-                    id = int(
+                data = {
+                    "id_1" : new_user.id,  # Récupère l'ID généré par la table 'users'
+                    "birth_date" : date.fromisoformat(request.form.get("birth_date")),
+                    "phone" : request.form.get("phone"),
+                    "obtained_certification" : request.form.get("obtained_certification"),
+                    "registration_date" : date.today(),
+                    "id" : int(
                         request.form.get("study_level_id")
-                    ),  # ID Clé étrangère vers study_level
-                )
-                db.session.add(new_student)
-
-            case "teacher": 
-                new_teacher = Teacher(
-                    id = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                    specialty = request.form.get("specialty"),
-                    hire_date = date.today(),
-                    hourly_rate = float(request.form.get("hourly_rate")),
-                    biography = request.form.get("biography"),
-                )
-                db.session.add(new_teacher)
-            case "staff": 
-                new_staff = Staff(
-                    id_1 = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                    start_date = date.fromisoformat(request.form.get("start_date")),
-                    responsabilities = request.form.get("responsabilities"),
-                    id= int(
-                        request.form.get("job_id")
-                    ),  # ID Clé étrangère vers job_id
-                )
-                db.session.add(new_staff)
-            case "admin": 
-                    new_admin = Admin(
-                        id_1 = new_user.id,  # Récupère l'ID généré (PK et FK vers users)
-                        promotion_date = date.fromisoformat(request.form.get("promotion_date")),
-                        id = int(
-                            request.form.get("access_level_id")
-                        ),  # ID Clé étrangère vers job_id
                     )
-                    db.session.add(new_admin)
+                }
+                validate = pydantic_student.Student(**data)
+                new_student=Student(**validate.model_dump())
+                db.session.add(new_student)
+                db.session.flush()
+
+            case "teacher":
+                data={
+                    "id" : new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    "specialty" :request.form.get("specialty"),
+                    "hire_date" : date.today(),
+                    "hourly_rate" : float(request.form.get("hourly_rate")),
+                    "biography" : request.form.get("biography")
+                }
+                validate = pydantic_teacher.Teacher(**data)
+                new_teacher=Teacher(**validate.model_dump())
+                db.session.add(new_teacher)
+                db.session.flush()
+            case "staff":
+                data={
+                    "id_1" : new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    "start_date" : date.fromisoformat(request.form.get("start_date")),
+                    "responsabilities" : request.form.get("responsabilities"),
+                    "id" : int(
+                        request.form.get("job_id")
+                    )
+                }
+                validate = pydandic_staff.Staff(**data)
+                new_staff=Staff(**validate.model_dump())
+                db.session.add(new_staff)
+                db.session.flush()
+            case "admin":
+                data={
+                    "id_1" :new_user.id,  # Récupère l'ID généré (PK et FK vers users)
+                    "promotion_date" : date.fromisoformat(request.form.get("promotion_date")),
+                    "id" : int(
+                        request.form.get("access_level_id")
+                    ),
+                }
+                validate = pydantic_admin.Admin(**data)
+                new_admin = Admin(**validate.model_dump())
+                db.session.add(new_admin)
+                db.session.flush()
 
         # Validation finale en base de données
         db.session.commit()
@@ -131,9 +156,12 @@ def study():
 @app.route("/study", methods=["POST"])
 def add_study_level():
     try:
-        new_role = StudyLevel(
-            label = request.form.get("label"),
-        )
+        data={
+            "label" : request.form.get("label")
+        }
+        validate = pydantic_study_level.StudyLevel(**data)
+
+        new_role = StudyLevel(**validate.model_dump())
         db.session.add(new_role)
         db.session.flush()
         db.session.commit()
@@ -159,9 +187,11 @@ def job():
 @app.route("/job", methods=["POST"])
 def add_job():
     try:
-        new_job = Job(
-            label = request.form.get("label"),
-        )
+        data={
+            "label" : request.form.get("label")
+        }
+        validate = pydandic_job.Job(**data)
+        new_job = Job(**validate.model_dump())
         db.session.add(new_job)
         db.session.flush()
         db.session.commit()
@@ -188,9 +218,11 @@ def role():
 @app.route("/role", methods=["POST"])
 def add_access_level():
     try:
-        new_role = AccessLevel(
-            label = request.form.get("label"),
-        )
+        data={
+            "label" : request.form.get("label")
+        }
+        validate = pydantic_access_level.AccessLevel(**data)
+        new_role = AccessLevel(**validate.model_dump())
         db.session.add(new_role)
         db.session.flush()
         db.session.commit()

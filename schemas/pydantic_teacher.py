@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, field_validator, Field, model_validator, ConfigDict
+from pydantic import BaseModel, ValidationError, field_validator, Field, model_validator
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -9,8 +9,6 @@ class Teacher(BaseModel):
     hire_date:date
     hourly_rate:Decimal
     biography:str|None=None
-
-    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("hire_date", mode="before")
     @classmethod
