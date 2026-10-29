@@ -121,13 +121,75 @@ def register_user():
         flash(f"Erreur lors de l'inscription : {str(e)}", "danger")
         return redirect(url_for("manage_users"))
 
-@app.route("/study")
-def study():
-   return render_template("study.html")
 
-@app.route("/admin")
-def admin():
-   return render_template("admin.html")
+@app.route("/study", methods=["GET"])
+def study():
+   study_level = db.session.query(StudyLevel).all()
+   return render_template("study.html", study_level = study_level)
+
+
+@app.route("/study", methods=["POST"])
+def add_study_level():
+    try:
+        new_role = StudyLevel(
+            label = request.form.get("label"),
+        )
+        db.session.add(new_role)
+        db.session.flush()
+        db.session.commit()
+        flash(
+            "Enregistrement réussie !",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une autre page
+        return redirect(url_for("study"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("study"))
+
+
+@app.route("/role", methods=["GET"])
+def role():
+   role_list = db.session.query(AccessLevel).all()
+   return render_template("role.html", role_list = role_list)
+
+
+@app.route("/role", methods=["POST"])
+def add_access_level():
+    try:
+        new_role = AccessLevel(
+            label = request.form.get("label"),
+        )
+        db.session.add(new_role)
+        db.session.flush()
+        db.session.commit()
+        flash(
+            "Enregistrement réussie !",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une autre page
+        return redirect(url_for("role"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("role"))
+
+
+@app.route("/session")
+def session():
+   return render_template("session.html")
+
+@app.route("/registration")
+def registration():
+   return render_template("registration.html")
+
+@app.route("/classroom")
+def classroom():
+   return render_template("classroom.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

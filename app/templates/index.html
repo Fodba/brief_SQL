@@ -18,9 +18,27 @@
             </a>
         </li>
         <li>
-            <a href="{{ url_for('admin') }}">
+            <a href="{{ url_for('role') }}">
                 <img src="{{ url_for('static', filename='img/admin.svg') }}">
-                <p>Admin</p>
+                <p>Rôles admin</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('session') }}">
+                <img src="{{ url_for('static', filename='img/admin.svg') }}">
+                <p>Session</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('registration') }}">
+                <img src="{{ url_for('static', filename='img/register.svg') }}">
+                <p>Inscription</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('classroom') }}">
+                <img src="{{ url_for('static', filename='img/classroom.svg') }}">
+                <p>Salles</p>
             </a>
         </li>
     </ul>
