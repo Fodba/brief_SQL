@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator
+from pydantic import BaseModel, ValidationError, Field, field_validator, ConfigDict
 class Job(BaseModel):
     """Classe représentant un job."""
 

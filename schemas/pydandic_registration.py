@@ -1,7 +1,8 @@
-from pydantic import BaseModel, ValidationError,field_validator, model_validator, ValidationInfo
+from pydantic import BaseModel, ValidationError,field_validator, model_validator, ConfigDict
 from datetime import date, datetime
 from typing import Literal
-from models import *
+from models import Session as SessionModel, Registration, Student
+from data import SessionLocal
 
 class Registration(BaseModel):
     """Classe représentant une inscription"""
@@ -14,6 +15,8 @@ class Registration(BaseModel):
     id_1:int
     id_2:int
 
+    model_config=ConfigDict(from_attributes=True)
+
     @field_validator("register_date", mode="before")
     @classmethod
     def accepter_date_francaise(cls, valeur):
@@ -22,21 +25,41 @@ class Registration(BaseModel):
             return datetime.strptime(valeur.strip(), "%d/%m/%Y").date()
         return valeur
 
+    @model_validator(mode="after")
+    def check_session_status(self):
+        with SessionLocal() as db:
+
+            session = db.query(SessionModel).filter(SessionModel.id == self.id_2).first()
+            if not session:
+                raise ValueError("La session n'existe pas.")
+            if session.status!="OPEN":
+                raise ValueError("La session n'est pas ouverte.")
+            count=db.query(Registration).count()
+            if count>=session.max_capacite:
+                raise ValueError("Plus de place dans la session.")
+        return self
 
     @model_validator(mode="after")
-    def check_session(self, info:ValidationInfo)->"Registration":
-        context = info.context
-        if context and "db_session" in context:
-            db = context["db_session"]
-        session_db =db.get(Session, self.id_2)
-        if not session_db:
-            raise ValueError("La session n'existe pas")
-        
+    def check_date_overlap(self):
+        with SessionLocal() as db:
+            session = db.query(SessionModel).join(SessionModel.id == self.id_2).first()
+            if not session:
+                raise ValueError("Session non-existante")
+            if session.end_date < self.register_date:
+                raise ValueError("Impossible de s'inscrire après la date de fin de la session")
 
+            overlap = db.query(Registration).join(SessionModel, Registration.id_2 == SessionModel.id).filter(
+                Registration.id_1==self.id_1,
+                Registration.id_2!=self.id_2,
+                SessionModel.start_date <= session.end_date,
+                SessionModel.end_date >= session.start_date,
+            )
+            if overlap:
+                raise ValueError("Chevauchement de date")
 
+        return self
 if __name__ == "__main__":
     try:
-        print(Session(status="OUVERT", title="Test", start_date="26/10/2026", end_date="27/10/2026", max_capacity=12, id_1=3, id_2=1))
         print(Registration(register_date='31/10/2003', status="ENREGISTRÉ",id_1=2, id_2=1))
     except ValidationError as e:
         print(e)
