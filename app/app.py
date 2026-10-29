@@ -248,13 +248,15 @@ def classroom():
 @app.route("/classroom", methods=["POST"])
 def add_classroom():
     try:
-        new_classroom = Classroom(
-            name = request.form.get("label"),
-            capacity = request.form.get("capacity"),
-            location = request.form.get("location"),
-            is_active = bool(request.form.get("is_active")),
-            equipments = request.form.get("equipments"),
-        )
+        data={
+            "name" : request.form.get("label"),
+            "capacity" : request.form.get("capacity"),
+            "location" : request.form.get("location"),
+            "is_active" : bool(request.form.get("is_active")),
+            "equipments" : request.form.get("equipments")
+        }
+        validate = pydantic_classroom.Classroom(**data)
+        new_classroom = Classroom(**validate.model_dump())
         db.session.add(new_classroom)
         db.session.flush()
         db.session.commit()
@@ -285,21 +287,23 @@ def session():
 def add_session():
     try:
         if request.form.get("type") == "add_session":
-            new_session = Session(
-                status = "OUVERT",
-                title = request.form.get("title"),
-                description = request.form.get("description"),
-                start_date = date.fromisoformat(request.form.get("start_date")),
-                end_date = date.fromisoformat(request.form.get("end_date")),
-                max_capacity = request.form.get("max_capacity"),
-                prerequisite  = request.form.get("prerequisite"),
-                id_1 = int(
+            data={
+                "status" : "OUVERT",
+                "title" : request.form.get("title"),
+                "description" : request.form.get("description"),
+                "start_date" : date.fromisoformat(request.form.get("start_date")),
+                "end_date" : date.fromisoformat(request.form.get("end_date")),
+                "max_capacity" : request.form.get("max_capacity"),
+                "prerequisite"  : request.form.get("prerequisite"),
+                "id_1" : int(
                     request.form.get("classroom_id")
                 ),  # ID Clé étrangère vers classroom_id
-                id_2 = int(
+                "id_2" : int(
                     request.form.get("teacher_id")
-                ),  # ID Clé étrangère vers teacher_id
-            )
+                )
+            }
+            validate = pydantic_session.Session(**data)
+            new_session = Session(**validate.model_dump())
             db.session.add(new_session)
             db.session.flush()
             db.session.commit()
@@ -337,12 +341,14 @@ def registration():
 @app.route("/registration", methods=["POST"])
 def add_registration():
     try:
-        new_registration = Registration(
-            register_date = date.fromisoformat(request.form.get("registration_date")),
-            status = "EN_ATTENTE",
-            id_1 = int(request.form.get("student_id")), # FK vers students
-            id_2 = int(request.form.get("session_id")),# FK vers session
-        )
+        data={
+            "register_date" : date.fromisoformat(request.form.get("registration_date")),
+            "status" : "EN_ATTENTE",
+            "id_1" : int(request.form.get("student_id")), # FK vers students
+            "id_2" : int(request.form.get("session_id"))# FK vers session
+        }
+        validate = pydandic_registration.Registration(**data)
+        new_registration = Registration(**validate.model_dump())
         db.session.add(new_registration)
         db.session.flush()
         db.session.commit()

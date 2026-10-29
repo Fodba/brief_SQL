@@ -1,6 +1,10 @@
 from pydantic import BaseModel, ValidationError, Field, field_validator, model_validator
 from datetime import date, datetime
 from typing import Literal
+from data import SessionLocal
+from models import Classroom, Session as SessionModel
+
+
 class Session(BaseModel):
     """Classe représentant une session"""
 
@@ -28,6 +32,36 @@ class Session(BaseModel):
     def verifier_dates(self):
         if self.start_date>self.end_date:
             raise ValueError("La date de début doit être plus petite que la date de fin")
+        return self
+
+    @model_validator(mode="after")
+    def verifier_disponibillite(self):
+        with SessionLocal() as db:
+            classroom = db.query(Classroom).filter(Classroom.id == self.id_1).first()
+            if not classroom:
+                raise ValueError("La salle n'existe pas")
+            if not classroom.is_active:
+                raise ValueError("Cette salle n'est pas ouverte.")
+            if classroom.capacity < self.max_capacity:
+                raise ValueError("Il n'y a pas assez de place dans la salle de classe.")
+
+            classroom_conflit = db.query(SessionModel).filter(
+                SessionModel.id_1==self.id_1,
+                SessionModel.start_date<=self.end_date,
+                SessionModel.end_date>=self.start_date              
+            ).first()
+
+            if classroom_conflit:
+                raise ValueError("La salle est déjà réservé entre ces dates")
+
+            teacher_conflit = db.query(SessionModel).filter(
+                SessionModel.id_2==self.id_2,
+                SessionModel.start_date<=self.end_date,
+                SessionModel.end_date>=self.start_date              
+            ).first()
+
+            if teacher_conflit:
+                raise ValueError("L'enseignant est déjà assigné à une autre session entre ces dates")
         return self
 
 if __name__ == "__main__":

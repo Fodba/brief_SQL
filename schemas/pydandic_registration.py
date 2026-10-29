@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ValidationError,field_validator, model_validator, ConfigDict
 from datetime import date, datetime
 from typing import Literal
-from models import Session as SessionModel, Registration, Student
+from models import Session as SessionModel, Registration as RegistrationModel
 from data import SessionLocal
 
 class Registration(BaseModel):
@@ -28,36 +28,28 @@ class Registration(BaseModel):
     @model_validator(mode="after")
     def check_session_status(self):
         with SessionLocal() as db:
-
             session = db.query(SessionModel).filter(SessionModel.id == self.id_2).first()
             if not session:
                 raise ValueError("La session n'existe pas.")
-            if session.status!="OPEN":
+            if session.status!="OUVERT":
                 raise ValueError("La session n'est pas ouverte.")
-            count=db.query(Registration).count()
-            if count>=session.max_capacite:
+            count=db.query(RegistrationModel).filter(RegistrationModel.id_2==self.id_2).count()
+            if count>=session.max_capacity:
                 raise ValueError("Plus de place dans la session.")
-        return self
-
-    @model_validator(mode="after")
-    def check_date_overlap(self):
-        with SessionLocal() as db:
-            session = db.query(SessionModel).join(SessionModel.id == self.id_2).first()
-            if not session:
-                raise ValueError("Session non-existante")
-            if session.end_date < self.register_date:
-                raise ValueError("Impossible de s'inscrire après la date de fin de la session")
-
-            overlap = db.query(Registration).join(SessionModel, Registration.id_2 == SessionModel.id).filter(
-                Registration.id_1==self.id_1,
-                Registration.id_2!=self.id_2,
-                SessionModel.start_date <= session.end_date,
-                SessionModel.end_date >= session.start_date,
+            conflit = (
+                db.query(RegistrationModel).join(SessionModel, RegistrationModel.id_2 == SessionModel.id) # Jointure pour accéder aux dates de la session
+                .filter(
+                    RegistrationModel.id_1 == self.id_1,
+                    SessionModel.start_date<=session.end_date,
+                    SessionModel.end_date>=session.start_date  
+                    )                     # Pour cet étudiant spécifique                                   # Dont les dates se croisent)
+                .first()
             )
-            if overlap:
-                raise ValueError("Chevauchement de date")
-
+            if conflit:
+                raise ValueError("Cette étudiant est inscrit à une autre session entre ces deux dates")
         return self
+
+    
 if __name__ == "__main__":
     try:
         print(Registration(register_date='31/10/2003', status="ENREGISTRÉ",id_1=2, id_2=1))
