@@ -21,134 +21,137 @@ def add_data():
 
     if conn_pg:
         engine = create_engine(url_pg)
+    cursor.execute("select * from users;")
 
-    # Create session for prepare multiple query before send to DB
-    SessionLocal = sessionmaker(bind=engine)
+    if not cursor.fetchone():
 
-    with SessionLocal() as session:
-        # Try to make transaction, else rollback
-        try:
-            print("- Insertion tables de base")
-            
-            # AccessLevel 
-            lvl_admin = AccessLevel(label="Administrateur Général")
-            lvl_mod = AccessLevel(label="Accès Restreint")
-            session.add_all([lvl_admin, lvl_mod])
+        # Create session for prepare multiple query before send to DB
+        SessionLocal = sessionmaker(bind=engine)
 
-            # Classroom
-            room1 = Classroom(
-                name="Salle Multimédia 202", 
-                capacity=24, 
-                location="Aile Nord", 
-                is_active=True, 
-                equipments="Vidéoprojecteur, Tableaux blancs"
-            )
-            session.add(room1)
+        with SessionLocal() as session:
+            # Try to make transaction, else rollback
+            try:
+                print("- Insertion tables de base")
+                
+                # AccessLevel 
+                lvl_admin = AccessLevel(label="Administrateur Général")
+                lvl_mod = AccessLevel(label="Accès Restreint")
+                session.add_all([lvl_admin, lvl_mod])
 
-            # Job
-            job_sec = Job(label="Secrétaire Académique")
-            session.add(job_sec)
+                # Classroom
+                room1 = Classroom(
+                    name="Salle Multimédia 202", 
+                    capacity=24, 
+                    location="Aile Nord", 
+                    is_active=True, 
+                    equipments="Vidéoprojecteur, Tableaux blancs"
+                )
+                session.add(room1)
 
-            # StudyLevel
-            study_bts = StudyLevel(label="BTS Informatique (SIO)")
-            session.add(study_bts)
+                # Job
+                job_sec = Job(label="Secrétaire Académique")
+                session.add(job_sec)
 
-            # Send temp query and check validity of auto-id
-            session.flush()
+                # StudyLevel
+                study_bts = StudyLevel(label="BTS Informatique (SIO)")
+                session.add(study_bts)
 
-        
-            print("- Insertion Users")
-            # Users 
-            u_admin = User(lastname="Martin", firstname="Alice", email="alice.martin@cftech.fr", creation_date=date(2026, 1, 1), is_active=True)
-            u_staff = User(lastname="Durand", firstname="Bob", email="bob.durand@cftech.fr", creation_date=date(2026, 2, 1), is_active=True)
-            u_teacher = User(lastname="Dupont", firstname="Jean", email="jean.dupont@cftech.fr", creation_date=date(2026, 3, 1), is_active=True)
-            u_student = User(lastname="Bernard", firstname="Lucas", email="lucas.bernard@cftech.fr", creation_date=date(2026, 9, 1), is_active=True)
-
-            # add multiple object in same time
-            session.add_all([u_admin, u_staff, u_teacher, u_student])
-            session.flush()
+                # Send temp query and check validity of auto-id
+                session.flush()
 
             
-            print("- Insertion utilisateurs spécifiques")
+                print("- Insertion Users")
+                # Users 
+                u_admin = User(lastname="Martin", firstname="Alice", email="alice.martin@cftech.fr", creation_date=date(2026, 1, 1), is_active=True)
+                u_staff = User(lastname="Durand", firstname="Bob", email="bob.durand@cftech.fr", creation_date=date(2026, 2, 1), is_active=True)
+                u_teacher = User(lastname="Dupont", firstname="Jean", email="jean.dupont@cftech.fr", creation_date=date(2026, 3, 1), is_active=True)
+                u_student = User(lastname="Bernard", firstname="Lucas", email="lucas.bernard@cftech.fr", creation_date=date(2026, 9, 1), is_active=True)
 
-            # Admin 
-            admin_entry = Admin(
-                id_1=u_admin.id,
-                promotion_date=date(2026, 1, 15), 
-                id=lvl_admin.id
-            )
-            session.add(admin_entry)
+                # add multiple object in same time
+                session.add_all([u_admin, u_staff, u_teacher, u_student])
+                session.flush()
 
-            # Staff 
-            staff_entry = Staff(
-                id_1=u_staff.id, 
-                start_date=date(2026, 2, 15), 
-                responsabilities="Planification et suivi des inscriptions.",
-                id=job_sec.id
-            )
-            session.add(staff_entry)
+                
+                print("- Insertion utilisateurs spécifiques")
 
-            # Teacher
-            teacher_entry = Teacher(
-                id=u_teacher.id,
-                specialty="Développement Python & SQL",
-                hire_date=date(2026, 3, 1),
-                hourly_rate=45.50,
-                biography="Expert en architectures logicielles et bases de données relationnelles."
-            )
-            session.add(teacher_entry)
+                # Admin 
+                admin_entry = Admin(
+                    id_1=u_admin.id,
+                    promotion_date=date(2026, 1, 15), 
+                    id=lvl_admin.id
+                )
+                session.add(admin_entry)
 
-            # Student 
-            student_entry = Student(
-                id_1=u_student.id,
-                birth_date=date(2005, 6, 20), 
-                phone="0102030405", 
-                obtained_certification="Baccalauréat STI2D", 
-                registration_date=date(2026, 9, 1), 
-                id=study_bts.id              
-            )
-            session.add(student_entry)
+                # Staff 
+                staff_entry = Staff(
+                    id_1=u_staff.id, 
+                    start_date=date(2026, 2, 15), 
+                    responsabilities="Planification et suivi des inscriptions.",
+                    id=job_sec.id
+                )
+                session.add(staff_entry)
 
-            session.flush()
+                # Teacher
+                teacher_entry = Teacher(
+                    id=u_teacher.id,
+                    specialty="Développement Python & SQL",
+                    hire_date=date(2026, 3, 1),
+                    hourly_rate=45.50,
+                    biography="Expert en architectures logicielles et bases de données relationnelles."
+                )
+                session.add(teacher_entry)
 
-            print("- Insertion des cours")
+                # Student 
+                student_entry = Student(
+                    id_1=u_student.id,
+                    birth_date=date(2005, 6, 20), 
+                    phone="0102030405", 
+                    obtained_certification="Baccalauréat STI2D", 
+                    registration_date=date(2026, 9, 1), 
+                    id=study_bts.id              
+                )
+                session.add(student_entry)
 
-            # Session 
-            session_entry = Session(
-                status="OUVERT",             
-                title="Maîtrise de l'ORM SQLAlchemy", 
-                description="Cours théorique et pratique sur la gestion des schémas et l'insertion de données.", 
-                start_date=date(2026, 10, 1), 
-                end_date=date(2026, 10, 5), 
-                max_capacity=25, 
-                prerequisite="Bases de la syntaxe Python 3",
-                id_1=room1.id,               
-                id_2=teacher_entry.id        
-            )
-            session.add(session_entry)
-            session.flush()
+                session.flush()
 
-            print("- Insertion Inscriptions des étudiants")
+                print("- Insertion des cours")
 
-            # Registration 
-            registration_entry = Registration(
-                register_date=date(2026, 9, 10), 
-                presence=None,              
-                status="ENREGISTRÉ",
-                id_1=student_entry.id_1,     
-                id_2=session_entry.id        
-            )
-            session.add(registration_entry)
+                # Session 
+                session_entry = Session(
+                    status="OUVERT",             
+                    title="Maîtrise de l'ORM SQLAlchemy", 
+                    description="Cours théorique et pratique sur la gestion des schémas et l'insertion de données.", 
+                    start_date=date(2026, 10, 1), 
+                    end_date=date(2026, 10, 5), 
+                    max_capacity=25, 
+                    prerequisite="Bases de la syntaxe Python 3",
+                    id_1=room1.id,               
+                    id_2=teacher_entry.id        
+                )
+                session.add(session_entry)
+                session.flush()
 
-            # send data inside PostgreSQL
-            session.commit()
-            print("✅ Félicitations : Toutes les données ont été insérées !")
-            
+                print("- Insertion Inscriptions des étudiants")
 
-        except Exception as e:
-            session.rollback()
-            print(f"❌ Annulation de la transaction suite à une erreur : {e}")
-            raise e
+                # Registration 
+                registration_entry = Registration(
+                    register_date=date(2026, 9, 10), 
+                    presence=None,              
+                    status="ENREGISTRÉ",
+                    id_1=student_entry.id_1,     
+                    id_2=session_entry.id        
+                )
+                session.add(registration_entry)
+
+                # send data inside PostgreSQL
+                session.commit()
+                print("✅ Félicitations : Toutes les données ont été insérées !")
+                
+
+            except Exception as e:
+                session.rollback()
+                print(f"❌ Annulation de la transaction suite à une erreur : {e}")
+                raise e
         
     cursor.close()
     conn_pg.close()
