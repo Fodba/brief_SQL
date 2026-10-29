@@ -97,6 +97,11 @@ Mauro ayant de l'experience avec ce logiciel, c'est tout naturellement que nous 
 Logiciel vu en formation, nous avons utiliser le live editor qui reste gratuit car nous n'avions pas besoin de fonctionnalitées poussées. 
 
 #### Pydantic
+SQLAlchemy étant notre choix de technologie pour l'accés à la base de données et l'insertion de données, nous avons également utilisé Pydantic pour la validation des données lorsque l'on insère de nouveaux éléments dans une table. Nons avons défini des modèles pour chaque table avec les différents champs et leurs types requis, ainsi que des contraintes pour respecter les demandes de vérification du brief à l'aide des field_validator et des model_validator(exemples : capacité de la classe > 1, date de fin > date de début pour une session).
+
+Ces field_validator ont également servi à la mise au propre des données (toto --> Toto (mit au propre avec une majuscule))
+
+Nous avons eu accés aussi à des types comme EmailStr pour vérifier les mails (si il y a un @ dans le mail par exemple) et Literal afin de définir des listes pour nos champs Enum (exemple : ["VALEUR_1", "VALEUR_2"])
 
 #### Alembic
 Alembic est l'outil de migration associé à SQLAlchemy. Il versionne le schéma de la base : chaque évolution est décrite dans un fichier de migration, appliquée dans l'ordre, et peut être annulée. Cela permet de faire évoluer la base sans la recréer et sans perdre les données existantes.
@@ -108,7 +113,7 @@ Alembic est l'outil de migration associé à SQLAlchemy. Il versionne le schéma
 La table Session contient déjà un champs `statut` et le role `SUPERADMIN` est une valeur entrée dans la table `access_level`.
 
 #### Flask
-Afin de monter en compétences nous avons choisi Flask vs Stearmlit. Nous pensons que cela était un bon choix car il est très facile d'interagir avec les modéles ORM à partir de Flask.   
+Afin de monter en compétences nous avons choisi Flask vs Streamlit. Nous pensons que cela était un bon choix car il est très facile d'interagir avec les modéles ORM à partir de Flask.   
 Le fait que Flask utilise un templating HTML (Jinja) qui ressemble à d'autre à faciliter la tâche puisque dans nore trinôme certains on une expérience Web.
 Dès lors il était plus confortable de travailler avec. Néanmoins notre projet livre un fichier app.py non optimiser par manque de temps. Nous n'avons pas eu la possibilité d'explorer les blueprint Flask pour scinder le code.  
 De même pour les fichiers css, nous n'avons pas eu le temps de pousser les investigations sur des technologies LESS/SASS au sein de Flask même si cela semble possible et permetterais une meilleure visibilité du code CSS.
