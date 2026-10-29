@@ -215,9 +215,34 @@ def session():
 def registration():
    return render_template("registration.html")
 
-@app.route("/classroom")
+@app.route("/classroom", methods=["GET"])
 def classroom():
-   return render_template("classroom.html")
+   classroom_list = db.session.query(Classroom).all()
+   return render_template("classroom.html", classroom_list = classroom_list)
+
+@app.route("/classroom", methods=["POST"])
+def add_classroom():
+    try:
+        new_classroom = Classroom(
+            name = request.form.get("label"),
+            capacity = request.form.get("capacity"),
+            location = request.form.get("location"),
+            is_active = bool(request.form.get("is_active")),
+            equipments = request.form.get("equipments"),
+        )
+        db.session.add(new_classroom)
+        db.session.flush()
+        db.session.commit()
+        flash(
+            "Enregistrement réussie !",
+            "success",
+        )
+        return redirect(url_for("classroom"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("classroom"))
 
 
 if __name__ == "__main__":

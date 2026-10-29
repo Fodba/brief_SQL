@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Gestion des salles</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-flash alert-{{ category }}">
+                    {{ message }}
+                    <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div id="classroom-form" class="form-content active">
+        <h2>Créer une nouvelle salle</h2>
+        <form action="classroom" method="POST">
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="label" required>
+            </p>
+            <p>
+                <label>Capacité :</label>
+                <input type="number" name="capacity" required min="1" size="5">
+            </p>
+            <p>
+                <label>Emplacement :</label>
+                <input type="text" name="location" required>
+            </p>
+            <p>
+                <label>Disponible :</label>
+                <span class="radio">
+                    <input type="radio" id="active_true" name="is_active" value="True">
+                    <label for="actuve_true">Oui</label>
+
+                    <input type="radio" id="active_false" name="is_active" value="False">
+                    <label for="active_false">Non</label>
+                </span>
+            </p>
+            <p>
+                <label>Equipements :</label>
+                <textarea name="equipments" rows="4"></textarea>
+            </p>
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+    </div>
+
+
+{% endblock %}
+{% block aside %}            
+    <h3>Liste des classes</h3>
+    <ul class="list-users">
+        {% for classroom in classroom_list %}
+            <li>
+                {{ classroom.name }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   
