@@ -49,8 +49,16 @@
         </li>
     </ul>
 {% endblock %}
-{% block aside %}    
-    <h3>Actualitées</h3>
-    <p>En construction</p>
- {% endblock %}
- 
+{% block aside %}            
+    <h3>Derniers inscrits</h3>
+    <ul class="list-users">
+        {# Boucle Jinja pour afficher chaque produit #}
+        {% for user in all_users %}
+            <li>
+                <strong>{{ user.lastname }}</strong> {{ user.firstname }} <br>
+                {{ user.email }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   

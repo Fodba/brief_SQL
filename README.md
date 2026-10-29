@@ -76,6 +76,7 @@ brief_SQL/
 ![MCD](./MCD/MCD.JPG)
 
 #### Diagrame des cas d'utilisations
+![MCD](./MCD/DCU.JPG)
 
 
 ## Choix techniques
@@ -95,3 +96,27 @@ Mauro ayant de l'experience avec ce logiciel, c'est tout naturellement que nous 
 #### Mermaid
 Logiciel vu en formation, nous avons utiliser le live editor qui reste gratuit car nous n'avions pas besoin de fonctionnalitées poussées. 
 
+#### Pydantic
+
+#### Alembic
+
+#### Flask
+Afin de monter en compétences nous avons choisi Flask vs Stearmlit. Nous pensons que cela était un bon choix car il est très facile d'interagir avec les modéles ORM à partir de Flask.   
+Le fait que Flask utilise un templating HTML (Jinja) qui ressemble à d'autre à faciliter la tâche puisque dans nore trinôme certains on une expérience Web.
+Dès lors il était plus confortable de travailler avec. Néanmoins notre projet livre un fichier app.py non optimiser par manque de temps. Nous n'avons pas eu la possibilité d'explorer les blueprint Flask pour scinder le code.  
+De même pour les fichiers css, nous n'avons pas eu le temps de pousser les investigations sur des technologies LESS/SASS au sein de Flask même si cela semble possible et permetterais une meilleure visibilité du code CSS.
+
+##### Graphisme de l'app Flask
+Les icônes ont étaient choisies dans une librairie libre de droit.  
+Le logo à était gérer par IA avec certaines consignes concernant l'aspect et le public visé.   
+Les lignes de code de reset CSS ont étaient prises sur internet sans prendre les solutions compléte de reset existantes.
+
+
+## Conclusion
+Ce projet à demander de multiples compétences, que cela soit en termes techniques qu'en terme d'organisation. Notre groupe à sû se faire confiance sur les tâches attribuées. Néanmoins nous relevons un manque de temps certain pour que tous puisse au mieux appréhender toutes les technologies que ce brief demande.
+
+## Remerciments
+Nous remercions nos formateurs : 
++ Benjamin Quinet
++ Olivier Dumange
++ Olivier Lacomblez

@@ -35,7 +35,9 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-   return render_template("index.html")
+   all_users = db.session.query(User).order_by(User.id.desc()).limit(5).all()
+   return render_template("index.html", 
+                           all_users = all_users)
 
 @app.route("/users", methods=["GET"])
 def manage_users():

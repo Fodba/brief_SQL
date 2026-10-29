@@ -2,10 +2,10 @@
 
 {% block content %}
     <h1>Gestion des inscriptions</h1>
-    <div class="tabs-nav-user">
+    <!-- <div class="tabs-nav-user">
         <div class="tab-btn active" onclick="switchTab('register-form', this)">Ajouter</div>
         <div class="tab-btn" onclick="switchTab('manage-form', this)">Gérer</div>
-    </div>
+    </div> -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -46,8 +46,8 @@
         </form>
     </div>
 
-    <div id="manage-form" class="form-content">
-        <h2>Gérer les inscriptions</h2>
+    <!-- <div id="manage-form" class="form-content">
+        <h2>Gérer la presence</h2>
         <form action="/session" method="POST">
              <p>
                 <label>Nom de la session</label>
@@ -56,14 +56,15 @@
                        {% for session in session_list %}
                             <option value="{{ session.id }}">{{ session.title }} - {{ session.status }}</option>
                         {% endfor %}
-                </select>
+                </select>s
             </p>
-             <p>
-                <label>Statut</label>
-                <select name="status" id="status" required>
-                    <option value="" disabled selected>-- Sélectionnez le statut --</option>
-                    <option value="FERMÉ">Fermé</option>
-                    <option value="ARCHIVÉ">Archivé</option>
+            <p>
+                <label>Etudiants</label>
+                <select name="student_id" id="student_id" required>
+                    <option value="" disabled selected>-- Sélectionnez la étudiants --</option>
+                    {% for student in student_list %}
+                        <option value="{{ student.user.id }}">{{ student.user.firstname }} {{ student.user.lastname }}</option>
+                    {% endfor %}
                 </select>
             </p>
             <button type="submit" class="btn" value="manage_session" name="type">Envoyer</button>
@@ -84,7 +85,7 @@
             document.getElementById(formId).classList.add('active');
             button.classList.add('active');
         }
-    </script>
+    </script> -->
 
 {% endblock %}
 {% block aside %}            
