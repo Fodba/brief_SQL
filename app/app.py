@@ -240,6 +240,35 @@ def add_access_level():
 
 
 
+@app.route("/classroom", methods=["GET"])
+def classroom():
+   classroom_list = db.session.query(Classroom).all()
+   return render_template("classroom.html", classroom_list = classroom_list)
+
+@app.route("/classroom", methods=["POST"])
+def add_classroom():
+    try:
+        new_classroom = Classroom(
+            name = request.form.get("label"),
+            capacity = request.form.get("capacity"),
+            location = request.form.get("location"),
+            is_active = bool(request.form.get("is_active")),
+            equipments = request.form.get("equipments"),
+        )
+        db.session.add(new_classroom)
+        db.session.flush()
+        db.session.commit()
+        flash(
+            "Enregistrement réussie !",
+            "success",
+        )
+        return redirect(url_for("classroom"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("classroom"))
+
 @app.route("/session", methods=["GET"])
 def session():
    session_list = db.session.query(Session).order_by(Session.id.desc()).limit(10).all()
@@ -295,38 +324,38 @@ def add_session():
         flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
         return redirect(url_for("session"))
 
-@app.route("/registration")
+@app.route("/registration", methods=["GET"])
 def registration():
-   return render_template("registration.html")
+   registration_list = db.session.query(Registration).all()
+   student_list = db.session.query(Student).all()
+   session_list = db.session.query(Session).order_by(Session.id.desc()).all()
+   return render_template("registration.html", 
+                          registration_list = registration_list,
+                          student_list = student_list,
+                          session_list = session_list)
 
-@app.route("/classroom", methods=["GET"])
-def classroom():
-   classroom_list = db.session.query(Classroom).all()
-   return render_template("classroom.html", classroom_list = classroom_list)
-
-@app.route("/classroom", methods=["POST"])
-def add_classroom():
+@app.route("/registration", methods=["POST"])
+def add_registration():
     try:
-        new_classroom = Classroom(
-            name = request.form.get("label"),
-            capacity = request.form.get("capacity"),
-            location = request.form.get("location"),
-            is_active = bool(request.form.get("is_active")),
-            equipments = request.form.get("equipments"),
+        new_registration = Registration(
+            register_date = date.fromisoformat(request.form.get("registration_date")),
+            status = "EN_ATTENTE",
+            id_1 = int(request.form.get("student_id")), # FK vers students
+            id_2 = int(request.form.get("session_id")),# FK vers session
         )
-        db.session.add(new_classroom)
+        db.session.add(new_registration)
         db.session.flush()
         db.session.commit()
         flash(
             "Enregistrement réussie !",
             "success",
         )
-        return redirect(url_for("classroom"))
-    
+        return redirect(url_for("registration"))
     except Exception as e:
         db.session.rollback() 
         flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
-        return redirect(url_for("classroom"))
+        return redirect(url_for("registration"))
+
 
 
 if __name__ == "__main__":
