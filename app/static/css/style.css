@@ -280,6 +280,7 @@ h2{font-size:1.25rem}
 .alert-flash{
     padding: 1rem;
     border: 1px solid #ccc;
+    background-color: #FFF;
     border-radius: .25rem;
     margin-bottom: 1rem;
     position: relative;

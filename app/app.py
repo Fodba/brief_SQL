@@ -306,7 +306,7 @@ def add_session():
             }
             validate = pydantic_session.Session(**data)
             new_session = Session(**validate.model_dump())
-            classroom = db.query(Classroom).filter(Classroom.id == new_session.id_1).first()
+            classroom = db.session.query(Classroom).filter(Classroom.id == new_session.id_1).first()
             if not classroom:
                 raise ValueError("La salle n'existe pas")
             if not classroom.is_active:
@@ -314,7 +314,7 @@ def add_session():
             if classroom.capacity < new_session.max_capacity:
                 raise ValueError("Il n'y a pas assez de place dans la salle de classe.")
 
-            classroom_conflit = db.query(Session).filter(
+            classroom_conflit = db.session.query(Session).filter(
                 Session.id_1==new_session.id_1,
                 Session.start_date<=new_session.end_date,
                 Session.end_date>=new_session.start_date              
@@ -323,7 +323,7 @@ def add_session():
             if classroom_conflit:
                 raise ValueError("La salle est déjà réservé entre ces dates")
 
-            teacher_conflit = db.query(Session).filter(
+            teacher_conflit = db.session.query(Session).filter(
                 Session.id_2==new_session.id_2,
                 Session.start_date<=new_session.end_date,
                 Session.end_date>=new_session.start_date              
@@ -378,17 +378,17 @@ def add_registration():
         validate = pydandic_registration.Registration(**data)
         new_registration = Registration(**validate.model_dump())
         
-        session = db.query(Session).filter(Session.id == new_registration.id_2).first()
+        session = db.session.query(Session).filter(Session.id == new_registration.id_2).first()
         if not session:
             raise ValueError("La session n'existe pas.")
         if session.status!="OUVERT":
             raise ValueError("La session n'est pas ouverte.")
-        count=db.query(Registration).filter(Registration.id_2==new_registration.id_2).count()
+        count=db.session.query(Registration).filter(Registration.id_2==new_registration.id_2).count()
         if count>=session.max_capacity:
             raise ValueError("Plus de place dans la session.")
         
         conflit = (
-            db.query(Registration).join(Session, Registration.id_2 == Session.id) # Jointure pour accéder aux dates de la session
+            db.session.query(Registration).join(Session, Registration.id_2 == Session.id) # Jointure pour accéder aux dates de la session
             .filter(
                 Registration.id_1 == new_registration.id_1,
                 Session.start_date<=session.end_date,
