@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, model_validator
+from pydantic import BaseModel, ValidationError, Field, field_validator, model_validator, ConfigDict
 from datetime import date, datetime
 class Student(BaseModel):
     """Classe représentant un étudiant."""
@@ -9,6 +9,8 @@ class Student(BaseModel):
     obtained_certification:str = Field(default=None, min_length=1, max_length=50)
     registration_date:date=date.today()
     id:int
+
+    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("birth_date", "registration_date", mode="before")
     @classmethod
