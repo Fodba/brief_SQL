@@ -60,6 +60,8 @@ def init_db():
             f"Base de données '{os.getenv('PG_DATABASE')}' créée avec succès via psycopg2 !"
         )
     else:
+        sql.SQL("DROP DATABASE {}").format(sql.Identifier(os.getenv('PG_DATABASE')))
+        sql.SQL("CREATE DATABASE {}").format(sql.Identifier(os.getenv('PG_DATABASE')))
         print(f"La base de données '{os.getenv('PG_DATABASE')}' existe déjà.")
 
     # Fermeture du curseur et de la connexion

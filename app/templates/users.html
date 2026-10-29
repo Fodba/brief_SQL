@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Gestion des utilisateurs</h1>
+
+    <!-- Barre de navigation des onglets -->
+    <div class="tabs-nav-user">
+        <div class="tab-btn active" onclick="switchTab('student-form', this)">Étudiant</div>
+        <div class="tab-btn" onclick="switchTab('teacher-form', this)">Professeur</div>
+        <div class="tab-btn" onclick="switchTab('staff-form', this)">Staff</div>
+        <div class="tab-btn" onclick="switchTab('admin-form', this)">Admin</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-flash alert-{{ category }}">
+                    {{ message }}
+                    <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!-- FORMULAIRE ÉTUDIANT -->
+    <div id="student-form" class="form-content active">
+        <h2>Créer un compte Étudiant</h2>
+        <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Date de naissance :</label>
+                <input type="date" name="birth_date" required>
+            </p>
+            <p>
+                <label>Téléphone :</label>
+                <input type="tel" name="phone">
+            </p>
+            <p>
+                <label>Dernière certification obtenue :</label>
+                <input type="text" name="obtained_certification">
+            </p>
+            <p>
+                <label> Niveau d'étude :</label>
+                <select name="study_level_id" id="study_level_id" required>
+                    <option value="" disabled selected>-- Sélectionnez votre niveau --</option>
+                    
+                    {# Boucle Jinja pour générer les options à partir de la base de données #}
+                    {% for level in study_level %}
+                        <option value="{{ level.id }}">{{ level.label }}</option>
+                    {% endfor %}
+                    
+                </select>
+            </p>
+            <button type="submit" class="btn" value="student" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+    <!-- FORMULAIRE PROFESSEUR -->
+    <div id="teacher-form" class="form-content">
+        <h2>Créer un compte Enseignant</h2>
+        <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Spécialité :</label>
+                <input type="text" name="specialty" required>
+            </p>
+            <p>
+                <label>Taux horaire (€) :</label>
+                <input type="number" step="0.01" name="hourly_rate" required>
+            </p>
+            <p>
+                <label>Biographie :</label>
+                <textarea name="biography" rows="4"></textarea>
+            </p>
+            <button type="submit" class="btn" value="teacher" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+        <!-- FORMULAIRE STAFF -->
+    <div id="staff-form" class="form-content">
+        <h2>Créer un compte Equipe pédagoquique</h2>
+        <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Responsabilités :</label>
+                <textarea name="responsabilities" rows="4"></textarea>
+            </p>
+            <p>
+                <label>Poste</label>
+                <select name="job_id" id="job_id" required>
+                    <option value="" disabled selected>-- Sélectionnez votre travail --</option>
+                    
+                    {# Boucle Jinja pour générer les options à partir de la base de données #}
+                    {% for job in job_list %}
+                        <option value="{{ job.id }}">{{ job.label }}</option>
+                    {% endfor %}
+                    
+                </select>
+            </p>
+            
+            <p>
+                <label>Date de début :</label>
+                <input type="date" name="start_date" required>
+            </p>
+            <button type="submit" class="btn" value="staff" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+        <!-- FORMULAIRE ADMIN -->
+    <div id="admin-form" class="form-content">
+         <form action="/users" method="POST">
+            <p>
+                <label>Prénom :</label>
+                <input type="text" name="firstname" required>
+            </p>
+            <p>
+                <label>Nom :</label>
+                <input type="text" name="lastname" required>
+            </p>
+            <p>
+                <label>Email :</label>
+                <input type="email" name="email" required>
+            </p>
+            <p>
+                <label>Droits</label>
+                <select name="access_level_id" id="access_level_id" required>
+                    <option value="" disabled selected>-- Sélectionnez les droits --</option>
+                    {% for access in access_list %}
+                        <option value="{{ access.id }}">{{ access.label }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            
+            <p>
+                <label>Date d'attribution :</label>
+                <input type="date" name="promotion_date" required>
+            </p>
+            <button type="submit" class="btn" value="admin" name="account_type">Envoyer</button>
+        </form>
+    </div>
+
+     <script>
+        function switchTab(formId, button) {
+            // Masquer tous les formulaires
+            const forms = document.querySelectorAll('.form-content');
+            forms.forEach(form => form.classList.remove('active'));
+
+            // Désactiver tous les boutons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Activer le formulaire et le bouton sélectionnés
+            document.getElementById(formId).classList.add('active');
+            button.classList.add('active');
+        }
+    </script>
+{% endblock %}
+{% block aside %}            
+    <h3>Derniers inscrits</h3>
+    <ul class="list-users">
+        {# Boucle Jinja pour afficher chaque produit #}
+        {% for user in all_users %}
+            <li>
+                <strong>{{ user.lastname }}</strong> {{ user.firstname }} <br>
+                {{ user.email }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   

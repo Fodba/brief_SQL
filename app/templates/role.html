@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Gestion des rôles</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-flash alert-{{ category }}">
+                    {{ message }}
+                    <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div id="role-form" class="form-content active">
+        <h2>Créer un niveau d'administration</h2>
+        <form action="/role" method="POST">
+            <p>
+                <label>Label :</label>
+                <input type="text" name="label" required>
+            </p>
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+    </div>
+
+
+{% endblock %}
+{% block aside %}            
+    <h3>Liste des rôles</h3>
+    <ul class="list-users">
+         {% for role in role_list %}
+            <li>
+                {{ role.label }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   

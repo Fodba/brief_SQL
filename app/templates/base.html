@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CFTech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-wrap">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.svg') }}">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('manage_users') }}">Utisitateurs</a></li>
+                    <li><a href="{{ url_for('study') }}">Niveau d'étude</a></li>
+                    <li><a href="{{ url_for('role') }}">Rôles admin</a></li>
+                    <li><a href="{{ url_for('job') }}">Postes</a></li>
+                    <li><a href="{{ url_for('classroom') }}">Salles</a></li>
+                    <li><a href="{{ url_for('session') }}">Session</a></li>
+                    <li><a href="{{ url_for('registration') }}">Inscription</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container site-content">
+        <div class="main-layout">
+            <!-- Zone dynamique où le contenu des autres pages s'injectera -->
+            <main class="main-content">
+                {% block content %}
+                {% endblock %}
+            </main>
+
+            <aside class="sidebar">
+                {% block aside %}
+                {% endblock %}
+            </aside>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-wrap">
+            <p>&copy; 2026 CFTech. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html>
