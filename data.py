@@ -82,7 +82,6 @@ def add_data():
             # Staff 
             staff_entry = Staff(
                 id_1=u_staff.id, 
-                job="Coordinateur", 
                 start_date=date(2026, 2, 15), 
                 responsabilities="Planification et suivi des inscriptions.",
                 id=job_sec.id
