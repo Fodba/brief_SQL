@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Gestion des sessions</h1>
+    <div class="tabs-nav-user">
+        <div class="tab-btn active" onclick="switchTab('session-form', this)">Ajouter</div>
+        <div class="tab-btn" onclick="switchTab('manage-form', this)">Gérer</div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-flash alert-{{ category }}">
+                    {{ message }}
+                    <span onclick="this.parentElement.style.display='none';" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px; line-height: 20px;">&times;</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div id="session-form" class="form-content active">
+        <h2>Créer une nouvelle session</h2>
+        <form action="/session" method="POST">
+            <p>
+                <label>Titre :</label>
+                <input type="text" name="title" required>
+            </p>
+            <p>
+                <label>Description :</label>
+                <textarea name="description" rows="4"></textarea>
+            </p>
+            <p>
+                <label>Date de début :</label>
+                <input type="date" name="start_date" required>
+            </p>
+            <p>
+                <label>Date de fin :</label>
+                <input type="date" name="end_date" required>
+            </p>      
+            <p>
+                <label>Capacité Maximun :</label>
+                <input type="number" name="max_capacity" required min="1" size="5">
+            </p>
+            <p>
+                <label>Prérequis :</label>
+                <textarea name="prerequisite" rows="4"></textarea>
+            </p>
+            <p>
+                <label>Salles</label>
+                <select name="classroom_id" id="classroom_id" required>
+                    <option value="" disabled selected>-- Sélectionnez la salle --</option>
+                    {% for classroom in classroom_list %}
+                        <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label>Professeur</label>
+                <select name="teacher_id" id="teacher_id" required>
+                    <option value="" disabled selected>-- Sélectionnez le professeur --</option>
+                    {% for teacher in teacher_list %}
+                        <option value="{{ teacher.id }}">{{ teacher.user.lastname }} {{ teacher.user.firstname }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <button type="submit" class="btn" value="add_session" name="type">Envoyer</button>
+        </form>
+    </div>
+
+    <div id="manage-form" class="form-content active">
+        <h2>Gérer les sessions</h2>
+        <form action="/session" method="POST">
+             <p>
+                <label>Nom de la session</label>
+                <select name="session_id" id="session_id" required>
+                    <option value="" disabled selected>-- Sélectionnez la session --</option>
+                       {% for session in session_list %}
+                            <option value="{{ session.id }}">{{ session.title }} - {{ session.status }}</option>
+                        {% endfor %}
+                </select>
+            </p>
+             <p>
+                <label>Statut</label>
+                <select name="status" id="status" required>
+                    <option value="" disabled selected>-- Sélectionnez le statut --</option>
+                    <option value="FERMÉ">Fermé</option>
+                    <option value="ARCHIVÉ">Archivé</option>
+                </select>
+            </p>
+            <button type="submit" class="btn" value="manage_session" name="type">Envoyer</button>
+        </form>
+    </div>
+
+     <script>
+        function switchTab(formId, button) {
+            // Masquer tous les formulaires
+            const forms = document.querySelectorAll('.form-content');
+            forms.forEach(form => form.classList.remove('active'));
+
+            // Désactiver tous les boutons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Activer le formulaire et le bouton sélectionnés
+            document.getElementById(formId).classList.add('active');
+            button.classList.add('active');
+        }
+    </script>
+
+{% endblock %}
+{% block aside %}            
+    <h3>Liste des sessions</h3>
+    <ul class="list-users">
+        {% for session in session_list %}
+            <li>
+                {{ session.title }} <br />
+                {{ session.start_date }} - {{ session.end_date }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

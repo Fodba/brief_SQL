@@ -239,9 +239,61 @@ def add_access_level():
         return redirect(url_for("role"))
 
 
-@app.route("/session")
+
+@app.route("/session", methods=["GET"])
 def session():
-   return render_template("session.html")
+   session_list = db.session.query(Session).order_by(Session.id.desc()).limit(10).all()
+   status_list = db.session.query(Session).order_by(Session.status.desc()).all()
+   teacher_list = db.session.query(Teacher).all()
+   classroom_list = db.session.query(Classroom).all()
+   return render_template("session.html", 
+                          session_list = session_list, 
+                          status_list = status_list,
+                          teacher_list = teacher_list,
+                          classroom_list = classroom_list)
+
+@app.route("/session", methods=["POST"])
+def add_session():
+    try:
+        if request.form.get("type") == "add_session":
+            new_session = Session(
+                status = "OUVERT",
+                title = request.form.get("title"),
+                description = request.form.get("description"),
+                start_date = date.fromisoformat(request.form.get("start_date")),
+                end_date = date.fromisoformat(request.form.get("end_date")),
+                max_capacity = request.form.get("max_capacity"),
+                prerequisite  = request.form.get("prerequisite"),
+                id_1 = int(
+                    request.form.get("classroom_id")
+                ),  # ID Clé étrangère vers classroom_id
+                id_2 = int(
+                    request.form.get("teacher_id")
+                ),  # ID Clé étrangère vers teacher_id
+            )
+            db.session.add(new_session)
+            db.session.flush()
+            db.session.commit()
+            flash(
+                "Enregistrement réussie !",
+                "success",
+            )
+            return redirect(url_for("session"))
+        elif request.form.get("type") == "manage_session":
+            session_to_update = db.session.query(Session).get(int(request.form.get("session_id")))
+            session_to_update.status = request.form.get("status")
+            
+            db.session.commit()
+            flash(
+                "Mis à jour réussie !",
+                "success",
+            )
+            return redirect(url_for("session"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("session"))
 
 @app.route("/registration")
 def registration():
