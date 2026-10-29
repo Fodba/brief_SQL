@@ -150,6 +150,35 @@ def add_study_level():
         return redirect(url_for("study"))
 
 
+@app.route("/job", methods=["GET"])
+def job():
+   job_list = db.session.query(Job).all()
+   return render_template("job.html", job_list = job_list)
+
+
+@app.route("/job", methods=["POST"])
+def add_job():
+    try:
+        new_job = Job(
+            label = request.form.get("label"),
+        )
+        db.session.add(new_job)
+        db.session.flush()
+        db.session.commit()
+        flash(
+            "Enregistrement réussie !",
+            "success",
+        )
+        # 3. On redirige sur la page du formulaire au lieu d'une autre page
+        return redirect(url_for("job"))
+    
+    except Exception as e:
+        db.session.rollback() 
+        flash(f"Erreur lors de l'enregistrement : {str(e)}", "danger")
+        return redirect(url_for("job"))
+
+
+
 @app.route("/role", methods=["GET"])
 def role():
    role_list = db.session.query(AccessLevel).all()
