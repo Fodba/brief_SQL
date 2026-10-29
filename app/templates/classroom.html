@@ -15,7 +15,7 @@
         {% endif %}
     {% endwith %}
     
-    <div id="classroom-form" class="form-content active">
+    <div id="classroom-form" class="form-content active" enctype="multipart/form-data">
         <h2>Créer une nouvelle salle</h2>
         <form action="classroom" method="POST">
             <p>
@@ -42,7 +42,7 @@
             </p>
             <p>
                 <label>Equipements :</label>
-                <textarea name="equipments" rows="4"></textarea>
+                <input type="file" name="equipments" >
             </p>
             <button type="submit" class="btn">Envoyer</button>
         </form>

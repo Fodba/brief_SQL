@@ -99,6 +99,13 @@ Logiciel vu en formation, nous avons utiliser le live editor qui reste gratuit c
 #### Pydantic
 
 #### Alembic
+Alembic est l'outil de migration associé à SQLAlchemy. Il versionne le schéma de la base : chaque évolution est décrite dans un fichier de migration, appliquée dans l'ordre, et peut être annulée. Cela permet de faire évoluer la base sans la recréer et sans perdre les données existantes.
+
+##### Migrations du projet
+001: Création des tables
+002: Modification du champs `equipments`de la table `Classroom` de str à json.
+
+La table Session contient déjà un champs `statut` et le role `SUPERADMIN` est une valeur entrée dans la table `access_level`.
 
 #### Flask
 Afin de monter en compétences nous avons choisi Flask vs Stearmlit. Nous pensons que cela était un bon choix car il est très facile d'interagir avec les modéles ORM à partir de Flask.   
