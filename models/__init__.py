@@ -17,17 +17,18 @@ from .teacher import Teacher
 from .session import Session
 from .registration import Registration
 
+
 def connect(database, query):
     try:
         # 1. Connexion à la base par défaut "postgres"
         conn = psycopg2.connect(
-            dbname=database, 
+            dbname=database,
             host=os.getenv("PG_HOST"),
             port=os.getenv("PG_PORT"),
             user=os.getenv("PG_USER"),
             password=os.getenv("PG_PASSWORD"),
         )
-        
+
         conn.autocommit = True
         # 2. execution de la requête
         cursor = conn.cursor()
@@ -40,17 +41,24 @@ def connect(database, query):
 
 
 def init_db():
-    # ÉTAPE 1 : Création de la base 
+    # ÉTAPE 1 : Création de la base
 
-    cursor, conn = connect("postgres", f"SELECT 1 FROM pg_database WHERE datname = '{os.getenv('PG_DATABASE')}';")
+    cursor, conn = connect(
+        "postgres",
+        f"SELECT 1 FROM pg_database WHERE datname = '{os.getenv('PG_DATABASE')}';",
+    )
 
     exists = cursor.fetchall()
 
     if not exists:
         cursor.execute(
-            sql.SQL("CREATE DATABASE {}").format(sql.Identifier(os.getenv('PG_DATABASE')))
+            sql.SQL("CREATE DATABASE {}").format(
+                sql.Identifier(os.getenv("PG_DATABASE"))
+            )
         )
-        print(f"Base de données '{os.getenv('PG_DATABASE')}' créée avec succès via psycopg2 !")
+        print(
+            f"Base de données '{os.getenv('PG_DATABASE')}' créée avec succès via psycopg2 !"
+        )
     else:
         print(f"La base de données '{os.getenv('PG_DATABASE')}' existe déjà.")
 
@@ -59,7 +67,7 @@ def init_db():
     conn.close()
 
 
-
+def populate_db():
     # ÉTAPE 2 : Connexion à la nouvelle base "CFTech" pour créer les tables
     cursor, conn_pg = connect(os.getenv("PG_DATABASE"), "SELECT version()")
     print("✅ Connecté à", cursor.fetchone()[0].split(" on ")[0])
@@ -72,7 +80,6 @@ def init_db():
     if conn_pg:
         engine = create_engine(url_pg)
 
-
     # Création de toutes les tables définies dans Base
     Base.metadata.create_all(engine)
 
@@ -80,5 +87,3 @@ def init_db():
     conn_pg.close()
     print("Toutes les tables ont été créées avec succès dans la base !")
     print("Tables présentes dans la base :", inspect(engine).get_table_names())
-
-    
