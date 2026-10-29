@@ -59,7 +59,7 @@ def init_db():
     conn.close()
 
 
-
+def populate_db():
     # ÉTAPE 2 : Connexion à la nouvelle base "CFTech" pour créer les tables
     cursor, conn_pg = connect(os.getenv("PG_DATABASE"), "SELECT version()")
     print("✅ Connecté à", cursor.fetchone()[0].split(" on ")[0])
