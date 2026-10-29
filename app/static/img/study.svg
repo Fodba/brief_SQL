@@ -1,21 +1,9 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	 width="800px" height="800px" viewBox="0 0 866 866" xml:space="preserve">
-<g>
-	<g>
-		<path d="M25,653.3h565.9v-89.6C579.1,548.1,571.2,529.4,568.6,509H127.3c-8,0-14.5-6.5-14.5-14.5s6.5-14.5,14.5-14.5h441.3
-			c7.2-56.6,55.601-100.5,114.101-100.5c63.399,0,115,51.6,115,115c0,26-8.601,49.9-23.2,69.2v89.6H841c13.8,0,25-11.2,25-25v-493
-			c0-13.8-11.2-25-25-25H25c-13.8,0-25,11.2-25,25v493C0,642.1,11.2,653.3,25,653.3z M283.3,188.8h299.4c8.3,0,15,6.7,15,15
-			c0,8.3-6.7,15-15,15H283.3c-8.3,0-15-6.7-15-15C268.3,195.5,275,188.8,283.3,188.8z M127.3,285.2h611.4c8,0,14.5,6.5,14.5,14.5
-			s-6.5,14.5-14.5,14.5H127.3c-8,0-14.5-6.5-14.5-14.5S119.3,285.2,127.3,285.2z"/>
-		<path d="M616.4,588.4V653.3v87.4c0,9.1,7.399,15,15.1,15c3.9,0,7.8-1.5,10.9-4.8l29.3-31.601c3-3.2,7-4.8,11-4.8s8,1.6,11,4.8
-			L723,750.9c3.1,3.3,7,4.8,10.9,4.8c7.699,0,15.1-5.9,15.1-15v-87.4V588.4c-18.7,13.3-41.6,21.1-66.3,21.1S635.2,601.7,616.4,588.4
-			z"/>
-		<path d="M762.6,522.8c3.301-9.2,5.101-19,5.101-28.3c0-46.9-38.101-85-85-85c-46.9,0-85,38.1-85,85c0,13,3.899,29,10.6,41.1
-			c2.5,4.5,5.4,8.801,8.7,12.7c15.6,19,39.3,31.101,65.7,31.101c26.399,0,50.1-12.101,65.7-31.101
-			C754.4,541,759.3,532.2,762.6,522.8z"/>
-	</g>
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 -8.14 62.451 62.451" xmlns="http://www.w3.org/2000/svg">
+  <g id="Group_35" data-name="Group 35" transform="translate(-782.964 -1356.609)">
+    <path id="Path_92" data-name="Path 92" d="M798.022,1369.359v23.226h.034c.353,4.555,7.685,8.2,16.7,8.2s16.347-3.641,16.7-8.2h.033v-23.226Z" fill="#d1d3d4" stroke="#231f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    <path id="Path_93" data-name="Path 93" d="M843.415,1373.207l-29.225,14.6-29.227-14.6,29.227-14.6Z" fill="#ffffff" stroke="#231f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    <line id="Line_40" data-name="Line 40" y1="19.235" transform="translate(784.964 1374.361)" fill="#ffffff" stroke="#231f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+  </g>
 </svg>

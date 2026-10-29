@@ -68,6 +68,10 @@ a {
     gap: 1.25rem; 
 }
 
+.main-nav a:hover{
+    color: #3498db;
+}
+
 /* Zone Principale (Main + Sidebar optionnelle) */
 .site-content {
     flex: 1; 
@@ -127,10 +131,9 @@ h2{font-size:1.25rem}
 .menu{
     list-style: none;
     display: inline-flex;
-    flex-flow: row;
+    flex-flow: wrap;
     width: 100%;
     justify-content: space-around;
-    margin: 1rem 0;
 }
 
 .menu li{
@@ -142,10 +145,11 @@ h2{font-size:1.25rem}
     flex-flow: column;
     align-items: center;
     justify-content: center;
+    margin: 1rem 1.5rem;
 }
 
 .menu li:hover{
-    background-color: #c7d1f0;
+    background-color: #9ac2dc;
 }
 
 .menu li a{
@@ -258,6 +262,7 @@ h2{font-size:1.25rem}
     border: 1px solid #ccc;
     border-radius: .25rem;
     margin-bottom: 1rem;
+    position: relative;
 }
 
 .alert-success{color:#118b35}
