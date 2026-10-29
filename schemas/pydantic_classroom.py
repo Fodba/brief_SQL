@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ValidationError, Field, field_validator
 class Classroom(BaseModel):
     """Classe représentant une salle de classe"""
 
@@ -8,7 +8,6 @@ class Classroom(BaseModel):
     is_active:bool=True # True par défaut
     equipments:str
 
-    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("name", "location")
     @classmethod

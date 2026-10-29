@@ -1,10 +1,8 @@
-from pydantic import BaseModel, ValidationError, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ValidationError, Field, field_validator
 class StudyLevel(BaseModel):
     """Classe représentant le niveau d'études d'un étudiant."""
 
     label:str = Field(min_length=1, max_length=50)
-
-    model_config = ConfigDict(from_attributes=True)
 
     @field_validator("label")
     @classmethod
