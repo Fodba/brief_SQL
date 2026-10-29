@@ -11,3 +11,4 @@ config = Config("alembic.ini")
 
 init_db()
 migrations.upgrade(config, "head")
+populate_db()
