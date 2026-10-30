@@ -92,7 +92,7 @@ brief_SQL/
 ## Choix techniques
 
 #### SQLAlchemy 
-Nous avons decidé de partir sur SQLAlchemy car celui-ci reste un standard et est trés bien documenté.
+Nous avons decidé de partir sur SQLAlchemy car celui-ci reste un standard et est très bien documenté.
 De plus cela nous à paru plus simple pour séparer les modèles et les schémas de Pydantic.
 Dans les différentes documentations que nous avons pu lire, il se trouve également qu'il y a moins de bug que sur SQLModel.
 
