@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>CFTech</h1>
+    <p>Votre centre de formation cours et ateliers sur les technologies numériques</p>
+
+    <ul class="menu">
+        <li>
+            <a href="{{ url_for('manage_users') }}">
+                <img src="{{ url_for('static', filename='img/users.svg') }}">
+                <p>Utilisateurs</p>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('study') }}">
+                <img src="{{ url_for('static', filename='img/study.svg') }}">
+                <p>Niveau d'étude</p>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('role') }}">
+                <img src="{{ url_for('static', filename='img/admin.svg') }}">
+                <p>Rôles admin</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('job') }}">
+                <img src="{{ url_for('static', filename='img/job.svg') }}">
+                <p>Postes</p>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('session') }}">
+                <img src="{{ url_for('static', filename='img/admin.svg') }}">
+                <p>Session</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('registration') }}">
+                <img src="{{ url_for('static', filename='img/register.svg') }}">
+                <p>Inscription</p>
+            </a>
+        </li>
+         <li>
+            <a href="{{ url_for('classroom') }}">
+                <img src="{{ url_for('static', filename='img/classroom.svg') }}">
+                <p>Salles</p>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+{% block aside %}            
+    <h3>Derniers inscrits</h3>
+    <ul class="list-users">
+        {# Boucle Jinja pour afficher chaque produit #}
+        {% for user in all_users %}
+            <li>
+                <strong>{{ user.lastname }}</strong> {{ user.firstname }} <br>
+                {{ user.email }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+   
